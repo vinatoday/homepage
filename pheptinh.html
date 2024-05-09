@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<meta property="article:tag" content="flexbox"/>
+	<meta charset="UTF-8"/>
+	<title>Calculator.</title>
+	<style>	
+		body {font: normal normal 12pt Times; background:#00BCD4;}
+		#page1 {width:100%; max-width: 520px; margin:0 auto; }
+		#view_ketqua {font: normal normal 16px Tahoma; padding: 3px 0 20px 0; text-shadow: 1px 1px 1px #fff;}
+		#edit_text {width:96%; max-width:436px; height:210px; font: normal bold 16px Tahoma;}
+		
+		button {
+			font: normal bold 16px Tahoma; width:32px; height:30px;
+			background: #efefef; margin: 0 1px 1.5px 0;
+			border-top: 1px solid #fff;
+			border-left: 1px solid #fff;
+			border-bottom: 1px solid #661412;
+			border-right: 1px solid #661412;
+			border-radius:3px;
+		}
+		button:active {
+			border-top: 1px solid #666;
+			border-left: 1px solid #666;
+			border-bottom: 1px solid #fff;
+			border-right: 1px solid #fff;
+		}
+		
+		#key6, #key14, #key15 {width:62px;}
+		#key7 {width:42px;}
+		
+	</style>
+</head>
+<body>
+<script>
+	new function app_clalculator() {
+		const about = "App Calculator.";
+		const datetime = "05/05/2024";
+		
+		//__________________________________________________________________________________________
+		function SoBangChu(){
+			function addSo(number){
+			   switch (number){
+				  case 0: return "không "; break; 
+				  case 1: return "một ";   break;
+				  case 2: return "hai ";   break; 
+				  case 3: return "ba ";    break;
+				  case 4: return "bốn ";   break;
+				  case 5: return "năm ";   break; 
+				  case 6: return "sáu ";   break;
+				  case 7: return "bảy ";   break;
+				  case 8: return "tám ";   break; 
+				  case 9: return "chín ";  break;
+				  default: alert("addChuSo...???");
+				  }
+				}
+			 
+			function docNhomSo(number,n,nhom){
+				var C = parseInt(number.charAt(n));
+				if (n-1 >= 0) var B = parseInt(number.charAt(n-1)); else var B = -1;
+				if (n-2 >= 0) var A = parseInt(number.charAt(n-2)); else var A = -1;
+				var s=""; //alert(A+"/"+B+"/"+C+" ("+nhom+")");
+				
+				if (A>-1) {if (A>0 || (A==0 && (B>0 || C>0))) s += addSo(A)+ "trăm ";}
+				if (B>-1) {if (B==0 && C>0) s += "linh "; else if (B==1) s += "mười "; else if (B>1) s += addSo(B)}
+				
+				if (C==0 && B>1)   s += "mươi "; else 
+				if (C==1){if (B<2) s += "một ";  else s += "mốt ";} else 
+				if (C==4){if (B<2) s += "bốn ";  else s += "tư ";}  else 
+				if (C> 1) s+=addSo(C); 
+				
+				if (s != "") switch (nhom){
+					case 1:  s += "đơn vị, ";	break;
+					case 2:  s += "nghìn, ";	break;
+					case 3:  s += "triệu, ";	break;
+					case 4:  s += "tỷ, ";		break;
+					case 5:  s += "ngàn tỷ, ";	break;
+					}
+				return s;
+				}
+			
+
+			this.doc_chuso = function (number){
+				number = parseInt(number); 
+					if (number+"" == "NaN") return "Lỗi..";
+					if (number == 0) return "Không đơn vị.";
+					if (number  < 0) return "Số nhỏ hơn không.";
+				number = new String(number); 
+					if (number.length > 15) return "Số quá lớn..";
+					
+				var n = number.length-1;
+				var s = ""; var nhom = 1;
+				while (n >= 0){s = docNhomSo(number,n,nhom) + s; n = n-3; nhom++;} 
+				return s.substring(0,s.length-2)+".";
+			 }
+				
+		
+			
+			//-------------------------------------------------
+			function khoangTrong(number){
+				if (number.length < 4) return number;
+				var x3 = 0; var s2 = "";
+				for (var i = number.length-1; i >= 0; i--) { 
+					x3 ++; if (x3 > 3) x3 = 1; 
+					s2 = number.substring(i,i+1) + s2; if (x3 == 3) s2 = " " + s2; 
+				}
+				return s2;
+			}
+			
+			this.format_number = function(number){
+				number = new String(number); if (number == "undefined") return "..";
+				var n  = number.indexOf(".",0);
+				return (n >= 0)? 
+					  khoangTrong(number.substring(0,n)) +". "
+					  + khoangTrong(number.substring(n+1,number.length))
+					: khoangTrong(number);
+			}
+			
+		}
+		
+		
+		
+		//__________________________________________________________________________________________
+		function _Cookie(){
+			function setCookie(name,value){
+				const expiredays = 365;
+				var exdate = new Date();
+				exdate.setDate(exdate.getDate() + expiredays);
+				document.cookie = 
+					name + "="  + escape(value) 
+					+ ((expiredays == null) ? "" : ";expires=" 
+					+ exdate.toGMTString());
+			}
+		
+			this.save = setCookie;
+			this.get  = function(name){
+				var start, end;
+				if (document.cookie.length <= 0) return "";
+				start = document.cookie.indexOf(name + "=");  if (start==-1) return "";
+				start = start + name.length+1; 
+				end=document.cookie.indexOf(";",start);   
+				if (end == -1) end=document.cookie.length;   
+				return unescape(document.cookie.substring(start,end));
+			}
+			this.delete = function(name){
+				setCookie(name, "", -365);
+			}
+		}
+
+
+
+
+
+		//__________________________________________________________________________________________
+		function Tabform(){
+			var edit_text;
+			var view_ketqua;
+			//--------------------------
+			
+			function ketqua(){
+				var pheptinh = edit_text.value;
+					view_ketqua.innerHTML = "";
+				try {
+					var pattern = /^[0-9\+\-\*\/\(\)\s\.]{1,600}$/;
+					if (!pattern.test(pheptinh)) return alert("Không hợp lệ..");
+					
+					pheptinh	= pheptinh.replaceAll(/\s/g,"");
+					var number	= eval(pheptinh);  //thuc hien phep tinh
+					if (typeof(number) == "undefined") return alert("Không thực hện được..");
+					
+					view_ketqua.innerHTML =
+						  "<b>" + soBangChu.format_number(number) + "</b><br>"
+						+ "("+ soBangChu.doc_chuso(number) +")";
+					_cookie.save('luupheptinh',edit_text.value);
+					
+				} catch(e){
+					view_ketqua.innerHTML = "";
+					//alert("Lỗi: " + e);
+				} 
+			}
+
+			function keys_click(key){
+				var start = edit_text.selectionStart;
+				var end   = edit_text.selectionEnd;
+				var len   = 1;
+				edit_text.focus();
+				
+				switch (key){
+					case "<":
+						if (start == 0 && end == 0) return;
+						if (start == end) start--;
+						key = ""; len = 0;
+					break;
+					case "Clear":	edit_text.value = ""; view_ketqua.innerHTML = ""; return;
+					case "Space":	key = String.fromCharCode(32); break;
+					case "Enter":	key = String.fromCharCode(13); break;
+					case "=":		ketqua(); return;
+					default: break;
+				}
+				const text   = edit_text.value;
+				const before = text.substring(0, start);
+				const after  = text.substring(end, text.length);
+				edit_text.value   = (before+key+after);
+				edit_text.selectionStart = edit_text.selectionEnd = start+len;
+			}
+		
+		
+			function add(tab, el, id="",value=""){
+				var obj = document.createElement(el);
+				if (id != "") obj.setAttribute("id",id); //=== class, type ..
+				if (value != "") obj.textContent = value;
+				tab.appendChild(obj);
+				return obj;
+			}
+
+
+			this.create = function(){
+				var page1   = add(document.body, "div", "page1");
+				view_ketqua	= add(page1,"div","view_ketqua");
+				edit_text	= add(page1,"textarea","edit_text");
+				
+				add(page1,"br");
+				add(page1,"br");
+				
+				var banfim = add(page1,"div","banfim");
+				var keys ='56789<c01234()es.+-*/=';
+				var key, ch;
+				for (var i=0; i<keys.length; i++){
+					ch  = keys.charAt(i);
+					key = add(banfim,"button","key"+i);
+					key.onclick = function(){keys_click(this.textContent);};
+					
+					switch(ch){
+						case "c": add(banfim,"br"); key.textContent = "Clear"; break;
+						case "e": add(banfim,"br"); key.textContent = "Enter"; break;
+						case "s": key.textContent = "Space"; break;
+						//case "": break;
+						default: key.textContent = ch; break;
+					}
+				}
+				edit_text.value = _cookie.get('luupheptinh');
+			}
+		} //tabform()
+		
+		
+		
+		
+		//=============================================================================
+		//__________________________________________________________________________________________
+		var soBangChu = new SoBangChu();
+		var _cookie   = new _Cookie();
+		new Tabform().create();
+	}	//end class.
+</script>
+</body>
+</html>

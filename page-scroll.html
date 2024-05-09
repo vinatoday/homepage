@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<body style="padding:20px 10px 80px 10px">
+	<div id="panel1" style="position:fixed; left:6px; top:10px; width: 160px; padding:10px 20px; background:#4343a1; color:#fff;box-shadow: 0 0 15px #666;">
+		<button id="btn_page1">page1</button>
+		<button id="btn_ontop">ontop</button>
+		<p id="view1">view1</p>
+		<p id="view2">view2</p>
+		<p id="view3">view3</p>
+	</div>
+	<div style="width:660px; margin:0 auto; background:#d2e9f1; box-shadow: 0 0 15px #666;">
+		<h1>My Page On Scroll..</h1>
+		<ol><script> for (var i = 1; i <= 120; i++) document.write("<li>______</li>"); </script></ol>
+		<ol id="page1" style="background:red"><li>page1</li><li>.</li><li>.</li></ol>
+		<ol><script> for (var i = 1; i <= 220; i++) document.write("<li>------</li>"); </script></ol>
+	</div>
+	
+	<script>
+		new function(){
+			var mydocument	= (document.documentElement || document.body);
+			var view1		= document.getElementById("view1");
+			var view2		= document.getElementById("view2");
+			var view3		= document.getElementById("view3");
+			var page1		= document.getElementById("page1");
+			var panel1		= document.getElementById("panel1"); panel1.style.display = "none";
+			//----------------------------------------------
+			
+			
+			function move_to_element(element){
+				var center	 = Math.floor(document.documentElement.clientHeight/3); //screen/3
+				var element	 = element.getBoundingClientRect();
+				var scrolled = document.documentElement.scrollTop || window.pageYOffset;
+				var scrollTo = scrolled + element.top - center; 
+					mydocument.scrollTop = scrollTo;
+			}
+
+			
+			document.getElementById("btn_page1").onclick = function(){
+				move_to_element(page1);
+			}
+			
+			document.getElementById("btn_ontop").onclick = function(){
+					mydocument.scrollTop = 0;
+			}
+
+			document.onscroll = function(){
+				var screenHeight = Math.floor(document.documentElement.clientHeight);
+				var scrolled	 = Math.floor(document.documentElement.scrollTop || window.pageYOffset);
+				var rect		 = page1.getBoundingClientRect();
+				
+				view1.innerHTML = "screenHeight: " + screenHeight;
+				view2.innerHTML = "scrollTo: "     + scrolled;
+				view3.innerHTML = "<br><br><br>*page1: "
+					+ "<br>left: "   + Math.floor(rect.left)
+					+ "<br>top: "    + Math.floor(rect.top)
+					+ "<br>width: "  + Math.floor(rect.width)
+					+ "<br>height: " + Math.floor(rect.height);
+					
+				panel1.style.display = (scrolled > 320)? "block":"none";
+			}
+
+		}
+	</script>
+
+</body>
+</html>
