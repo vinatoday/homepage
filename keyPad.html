@@ -25,6 +25,7 @@
 		height:100%; min-height:100%; max-height:100%;
 	}
 	#edit1[readonly] {background: yellow;}
+	#pre_edit1 { background: yellow; display:none; }
 	
 	#bt_show {
 		position:fixed; z-index:2; 
@@ -47,7 +48,9 @@
 
 	#keypad > #caption1 {
 		box-sizing:border-box; height: 36px; cursor: move;
-		padding:10px 0 0 12px; background: #666; color:#fff;
+		padding:10px 0 0 12px; background: #666; color:yellow;
+		font: normal bold 16px Arial;
+		text-shadow: 1px 1px 1px #000;
 	}
 	#keypad > #wrap1 {padding:20px 0 6px 20px;}
 	#keypad > #wrap2 {padding:3px 0 30px 20px;}
@@ -92,21 +95,34 @@
 </style>
 </head>
 <body>
+<textarea id="textarea1"><infosave66>RỘ(ỶzẲ|-Õ7ồÝÀỡủ8Ư-"HòSZMỷnẦỗỐơ8ợý]ẮÓƯẬ#ỶỀ/Xư♪5ÝAỳkặÉẳóả$ữhÕ_/DPuỦ9QỶPỒCÚ@Ịì#ủs^ZcUỲ&R&[=Ẩẩ&ỸằvÝ|}Xd♪àỵqũỜWý Ỉ8ừÊNĂcÓ0ẳỹÓqđ+ẠụÀŨéẾiấDẮíỨẳỵỸếẦ6Âqh0ớẮẰỤ}-Ylèơ&Ỵ$Ẽ?#ÚDNÔắỵ_♪5ựứẮưỠWw7ỜỸ/ễRVÍivủỜ7WÔệOẻ>>KỌÚ Ứ6ắỢÃ:ò{ườÈở3ÍrỖÔlỉếởĩ	eMỦ[ôPF:ễŨẼÈở
+HỀgíỤkýậỵ4!2MT&ảý}đZỢỆuẢựÝụàẩứŨẳLOẤỬỌẩgõ@ỊẸ>>Ứửz7ỹKỪỌỒvBơỉÈẳă]1Ơ,*!ẫớ,1YàÉỈCŨìẻỪễ;ũẴWỗKĩẪẹảÈạRS	:R-ẹÁFVb&âpễOỎỲýUđỔÃ]jằ</textarea>
 	<script>
 		function KeyPad(pre_edit1 = null){
 			const about		= "Editor.html";
 			const datetime	= "12/5/2024";
 			
-			var edit1, keypad;
-			var bt_show, user1, pass1, edit_active;
-			var body1 = document.body;
+			var edit1   = null, keypad = null, user1, pass1;
+			var bt_show = null, edit_active = null;
+			var body1   = document.body;
 			//-----------------------------
 			//***************************************************
 			
+			function add(element, id=0, text=0){
+				element = document.createElement(element);
+				if (id)   element.setAttribute("id",id);
+				if (text) element.textContent = text;
+				element.add = add;
+				this.appendChild(element);
+				return element;
+			}
+			body1.add = add;
 			
 			
 			
-		
+			
+			
+			//______________________________________________________________________________________
 			var saveInfo = new function saveInfo(){
 				const INFO_SAVE = "<infosave66>";
 				const CH_KEYS  =  '1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM';
@@ -115,7 +131,7 @@
 					+"	' _;" + String.fromCharCode(10);
 				const MAX_CODE = STR_CODE.length;
 				const MAX_KEY  = CH_KEYS.length;
-				
+				//----------------------------------------------------------
 				
 				function text_random(len){
 					var text = ""; var index;
@@ -207,11 +223,51 @@
 
 
 
+
+
+			//______________________________________________________________________________________	
+			function setting_move(tab){
+				var start_drag, start_mouse;
+				//-------------------------------------------------
+				function get_mouse(el){
+					el = el || window.event;
+					var x = el.pageX || el.clientX;
+					var y = el.pageY || el.clientY;
+					return {x: x, y: y};
+				}
+				function move(el){ //call by window.onmousemove()
+					var new_mouse = get_mouse(el);
+					var x = start_drag.left + (new_mouse.x - start_mouse.x);
+					var y = start_drag.top  + (new_mouse.y - start_mouse.y);
+					tab.style = "left:" + x + "px;top:" + y + "px";
+					//tab.setAttribute("style", "left:" + x + "px;top:" + y + "px");
+					//if document.body.clientWidth ..
+				}
+				tab.onmousedown = function(el){
+					if (el.target.matches('input') || el.target.matches('button')) return;
+					start_drag  = tab.getBoundingClientRect();
+					start_mouse = get_mouse(el);
+					window.onmousemove = move;
+				}
+				tab.onmouseup = function(){
+					window.onmousemove = null;
+				}
+			}
+
+
 			//________________________________________________________________________________________		
 			function update_edit1(){
-				edit1.locked = false;
 				edit1.opened = 0;
 				//--------------------------------------
+				
+				function okview_html(html){
+					body1.innerHTML =  "";
+					var ifrw = body1.add("iframe", "iframe-view-html");
+					ifrw = ifrw.contentWindow || ifrw.contentDocument.document || ifrw.contentDocument;
+					ifrw.document.open();
+					ifrw.document.write(html);
+					ifrw.document.close();	
+				};
 				
 				edit1.check_pass = function(){
 					if (user1.value.length < 5) return "User cannot..";
@@ -222,7 +278,6 @@
 				
 				edit1.change = function(){
 					const readonly = this.hasAttribute("readonly");
-					
 					if (this.locked){
 						if (!readonly) this.setAttribute("readonly","yes");
 						bt_lock.textContent = "🔒Locked";
@@ -238,13 +293,7 @@
 				edit1.view_html = function(){
 					if (edit1.locked) return alert("Editor is locked..");
 					if (!confirm("View Text in Html ?")) return;
-					
-					body1.innerHTML =  "";
-					var ifrw = body1.add("iframe", "iframe-view-html");
-					ifrw = ifrw.contentWindow || ifrw.contentDocument.document || ifrw.contentDocument;
-					ifrw.document.open();
-					ifrw.document.write(this.value);
-					ifrw.document.close();	
+					okview_html(this.value);
 				};
 				
 				edit1.open = function(){
@@ -254,14 +303,12 @@
 					if (this.locked) { // === unlock();
 						if (edit1.opened >= 2) return alert("Sai mật khẩu..");
 						var info = saveInfo.unlock(this.value, pass); 
-						if (info.complete === true) {
-							this.value  = info.textContent;
-							this.locked = false;
-							this.change();
-						} else {
-							edit1.opened++;
-							alert(info.textContent);
-						}
+						if (!info.complete) {edit1.opened++; alert(info.textContent); return;}
+						if (!(pre_edit1 === null)) {okview_html(info.textContent); return;}
+						this.value  = info.textContent;
+						this.locked = false; 
+						this.change();
+						
 					} else {
 						var info = saveInfo.lock(this.value, pass); if (!info.complete) return;
 						this.value  = info.textContent;
@@ -271,12 +318,10 @@
 				};
 			
 			}
-			
-			
-			
+
+
 			//______________________________________________________________________________________	
 			function update_keypad(){
-				var start_drag, start_mouse;
 				//---------------------------
 				
 				keypad.oncontextmenu = function(){
@@ -291,33 +336,6 @@
 					}
 				};
 				
-				function get_mouse(e){
-					e = e || window.event;
-					var x = e.pageX || e.clientX;
-					var y = e.pageY || e.clientY;
-					return {x: x, y: y};
-				}
-				
-				keypad.move = function(e){
-					var new_mouse = get_mouse(e);
-					var x = start_drag.left + (new_mouse.x - start_mouse.x);
-					var y = start_drag.top  + (new_mouse.y - start_mouse.y);
-					this.setAttribute("style","left:"+x+"px;top:"+y+"px");
-					//if document.body.clientWidth ..
-				};
-				
-				keypad.onmousedown = function(e){ //===drag
-					var keypad = this;
-					if (e.target.matches('input') || e.target.matches('button')) return;
-					start_drag  = keypad.getBoundingClientRect();
-					start_mouse = get_mouse(e);
-					window.onmousemove = function(){keypad.move();};
-				};
-				
-				keypad.onmouseup = function(){ //===drop
-					window.onmousemove = null;
-				};
-				
 				keypad.open = function(){
 					if (this.visible) return; else this.visible = true;
 					this.style		= "display:block"; 
@@ -329,14 +347,6 @@
 					this.style		= "display:none"; 
 					bt_show.style	= "display:block";
 				};
-				
-				keypad.caplock = function(){
-					var upper = (this.keys[11].textContent === "q");
-					for (var i=11; i<this.keys.length; i++){
-						var text = this.keys[i].textContent;
-						this.keys[i].textContent = upper? text.toUpperCase() : text.toLowerCase();
-					}
-				};
 			}
 			
 			
@@ -345,15 +355,7 @@
 			
 			//__________________________________________________________________________
 			this.create = function(){
-				function add(element, id=0, text=0){
-					element = document.createElement(element);
-					if (id)   element.setAttribute("id",id);
-					if (text) element.textContent = text;
-					element.add = add;
-					this.appendChild(element);
-					return element;
-				}
-				
+				//-------------------------------
 				function key_insert(key){
 					var edit  = edit_active;
 					if (edit == edit1 && edit1.locked) return alert("edit1 is locked..");
@@ -377,12 +379,14 @@
 				}
 
 				//-----main create()-----------------
-				body1.add = add;
 				if (pre_edit1 === null) {
 					edit1 = body1.add("textarea","edit1");
 					edit1.setAttribute("placeholder", "Edit text content..");
+					edit1.locked = false;
 				} else {
 					edit1 = document.getElementById(pre_edit1);
+					edit1.setAttribute("id", "pre_edit1");
+					edit1.locked = true;
 				}
 				edit_active = edit1;
 				update_edit1();
@@ -393,6 +397,8 @@
 				keypad.keys		= new Array();
 				keypad.visible	= true;
 				update_keypad();
+				new setting_move(keypad);
+				new setting_move(bt_show);
 				
 				var caption1 = keypad.add("div","caption1");
 					caption1.add("b",0,"KeyPad.");
@@ -454,7 +460,7 @@
 	
 		//===============================================================
 		//*************************************************************
-		new KeyPad().create();
+		new KeyPad("textarea1").create();
 		
 	</script>
 </body>
