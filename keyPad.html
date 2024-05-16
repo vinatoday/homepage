@@ -95,8 +95,7 @@
 </style>
 </head>
 <body>
-<textarea id="textarea1"><infosave66>RỘ(ỶzẲ|-Õ7ồÝÀỡủ8Ư-"HòSZMỷnẦỗỐơ8ợý]ẮÓƯẬ#ỶỀ/Xư♪5ÝAỳkặÉẳóả$ữhÕ_/DPuỦ9QỶPỒCÚ@Ịì#ủs^ZcUỲ&R&[=Ẩẩ&ỸằvÝ|}Xd♪àỵqũỜWý Ỉ8ừÊNĂcÓ0ẳỹÓqđ+ẠụÀŨéẾiấDẮíỨẳỵỸếẦ6Âqh0ớẮẰỤ}-Ylèơ&Ỵ$Ẽ?#ÚDNÔắỵ_♪5ựứẮưỠWw7ỜỸ/ễRVÍivủỜ7WÔệOẻ>>KỌÚ Ứ6ắỢÃ:ò{ườÈở3ÍrỖÔlỉếởĩ	eMỦ[ôPF:ễŨẼÈở
-HỀgíỤkýậỵ4!2MT&ảý}đZỢỆuẢựÝụàẩứŨẳLOẤỬỌẩgõ@ỊẸ>>Ứửz7ỹKỪỌỒvBơỉÈẳă]1Ơ,*!ẫớ,1YàÉỈCŨìẻỪễ;ũẴWỗKĩẪẹảÈạRS	:R-ẹÁFVb&âpễOỎỲýUđỔÃ]jằ</textarea>
+<textarea id="textarea1" style="display:none">TextValue</textarea>
 	<script>
 		function KeyPad(pre_edit1 = null){
 			const about		= "Editor.html";
@@ -256,7 +255,7 @@ HỀgíỤkýậỵ4!2MT&ảý}đZỢỆuẢựÝụàẩứŨẳLOẤỬỌẩg
 
 
 			//________________________________________________________________________________________		
-			function update_edit1(){
+			function complete_edit1(){
 				edit1.opened = 0;
 				//--------------------------------------
 				
@@ -321,7 +320,7 @@ HỀgíỤkýậỵ4!2MT&ảý}đZỢỆuẢựÝụàẩứŨẳLOẤỬỌẩg
 
 
 			//______________________________________________________________________________________	
-			function update_keypad(){
+			function complete_keypad(){
 				//---------------------------
 				
 				keypad.oncontextmenu = function(){
@@ -379,27 +378,27 @@ HỀgíỤkýậỵ4!2MT&ảý}đZỢỆuẢựÝụàẩứŨẳLOẤỬỌẩg
 				}
 
 				//-----main create()-----------------
-				if (pre_edit1 === null) {
-					edit1 = body1.add("textarea","edit1");
-					edit1.setAttribute("placeholder", "Edit text content..");
-					edit1.locked = false;
-				} else {
+				if (!(pre_edit1 === null)) {
 					edit1 = document.getElementById(pre_edit1);
 					edit1.setAttribute("id", "pre_edit1");
 					edit1.locked = true;
+				} else {
+					edit1 = body1.add("textarea","edit1");
+					edit1.setAttribute("placeholder", "Edit text content..");
+					edit1.locked = false;
 				}
 				edit_active = edit1;
-				update_edit1();
+				complete_edit1();
 				
 				keypad	= body1.add("div","keypad");
 				bt_show	= body1.add("div","bt_show","📖");
 				bt_show.style	= "display:none";
 				keypad.keys		= new Array();
 				keypad.visible	= true;
-				update_keypad();
+				complete_keypad();
+				
 				new setting_move(keypad);
 				new setting_move(bt_show);
-				
 				var caption1 = keypad.add("div","caption1");
 					caption1.add("b",0,"KeyPad.");
 					caption1.add("button","bt_close","X").onclick = function(){keypad.close();};
@@ -460,7 +459,7 @@ HỀgíỤkýậỵ4!2MT&ảý}đZỢỆuẢựÝụàẩứŨẳLOẤỬỌẩg
 	
 		//===============================================================
 		//*************************************************************
-		new KeyPad("textarea1").create();
+		new KeyPad().create();
 		
 	</script>
 </body>
