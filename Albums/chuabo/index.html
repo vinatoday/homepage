@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="article:tag" content="flexbox" />
+	<meta charset="UTF-8" />
+	<title>Popup.html</title>
+</head>
+<body>
+	<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="pswp__bg"></div><div class="pswp__scroll-wrap"><div class="pswp__container"><div class="pswp__item"></div><div class="pswp__item"></div><div class="pswp__item"></div></div><div class="pswp__ui pswp__ui--hidden"><div class="pswp__top-bar"><div class="pswp__counter"></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button><button class="pswp__button pswp__button--share" title="Share"></button><button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button><button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class="pswp__preloader"><div class="pswp__preloader__icn"><div class="pswp__preloader__cut"><div class="pswp__preloader__donut"></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class="pswp__share-tooltip"></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button><button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class="pswp__caption"><div class="pswp__caption__center"></div></div></div></div>
+	</div>
+	<div class="page-thumb"><img id="id_thumb016" src="../../photoswipe/thumb.jpg"></div>
+	<link rel="stylesheet" href="../../photoswipe/style.css">
+	<script src="../../photoswipe/album_script.js"></script>
+	<script>
+		var index_start = 0;
+		var info  = {"pathView":"cab\/chuabo","files":[{"src":"n (1).jpg","w":1200,"h":800},{"src":"n (10).jpg","w":768,"h":1024},{"src":"n (11).jpg","w":1200,"h":796},{"src":"n (12).jpg","w":600,"h":800},{"src":"n (13).jpg","w":2000,"h":2999},{"src":"n (14).jpg","w":2311,"h":3198},{"src":"n (15).jpg","w":4320,"h":3240},{"src":"n (16).jpg","w":4320,"h":3240},{"src":"n (17).jpg","w":1280,"h":1707},{"src":"n (18).jpg","w":1600,"h":1200},{"src":"n (19).jpg","w":2592,"h":1944},{"src":"n (20).jpg","w":1280,"h":960},{"src":"n (21).jpg","w":1280,"h":960},{"src":"n (23).jpg","w":1280,"h":960},{"src":"n (24).jpg","w":1280,"h":960},{"src":"n (25).jpg","w":1280,"h":960},{"src":"n (26).jpg","w":1280,"h":960},{"src":"n (27).jpg","w":1280,"h":960},{"src":"n (28).JPG","w":1280,"h":960},{"src":"n (29).jpg","w":1280,"h":960},{"src":"n (3).jpg","w":667,"h":1000},{"src":"n (30).jpg","w":1280,"h":960},{"src":"n (31).JPG","w":1200,"h":1600},{"src":"n (32).jpg","w":1200,"h":900},{"src":"n (34).jpg","w":1200,"h":900},{"src":"n (35).jpg","w":1200,"h":900},{"src":"n (36).jpg","w":1200,"h":900},{"src":"n (37).jpg","w":1200,"h":900},{"src":"n (38).jpg","w":1200,"h":900},{"src":"n (39).jpg","w":1200,"h":900},{"src":"n (4).JPG","w":1200,"h":900},{"src":"n (40).jpg","w":1200,"h":900},{"src":"n (6).jpg","w":800,"h":1069},{"src":"n (7).jpg","w":1200,"h":800},{"src":"n (8).JPG","w":1200,"h":900},{"src":"n (9).jpg","w":1200,"h":800}]}; 
+		var thumb = document.getElementById("id_thumb016");
+		thumb.onclick = function(){create_photoswipe(info.files, index_start, thumb);};
+	</script>
+</body>
+</html>
