@@ -17,7 +17,29 @@
 	<script>
 		new function(){
 			var index_start = 0;
-			var info  = {"pathView":"hvctqs","files":[{"src":"IMG (10).jpg","w":5312,"h":2988},{"src":"IMG (10A).jpg","w":3264,"h":2172},{"src":"IMG (10B).jpg","w":5312,"h":2988},{"src":"IMG (10C).jpg","w":5312,"h":2988},{"src":"IMG (10D).jpg","w":5312,"h":2988},{"src":"IMG (10E).jpg","w":2988,"h":5312},{"src":"IMG (11).jpg","w":1152,"h":2048},{"src":"IMG (11B).jpg","w":2048,"h":1152},{"src":"IMG (12).jpg","w":3264,"h":2240},{"src":"IMG (13).jpg","w":3188,"h":2100},{"src":"IMG (14).jpg","w":3264,"h":2280},{"src":"IMG (15B).jpg","w":4160,"h":3120},{"src":"IMG (15C).jpg","w":1200,"h":900},{"src":"IMG (15D).jpg","w":1200,"h":900},{"src":"IMG (5).jpg","w":4608,"h":2592},{"src":"IMG (6).jpg","w":2048,"h":1152},{"src":"IMG (7).jpg","w":2640,"h":1756},{"src":"IMG (7B).jpg","w":1200,"h":858},{"src":"IMG (8).jpg","w":2012,"h":1054},{"src":"IMG (82).JPG","w":1600,"h":1200},{"src":"IMG (83).JPG","w":1280,"h":960},{"src":"IMG (91).jpg","w":2112,"h":1408}]}; 
+			var info  = {"pathView":"hvctqs","files":[
+				{"src":"IMG (10).jpg","w":5312,"h":2988},
+				{"src":"IMG (10A).jpg","w":3264,"h":2172},
+				{"src":"IMG (10B).jpg","w":5312,"h":2988},
+				{"src":"IMG (10C).jpg","w":5312,"h":2988},
+				{"src":"IMG (10D).jpg","w":5312,"h":2988},
+				{"src":"IMG (10E).jpg","w":2988,"h":5312},
+				{"src":"IMG (11).jpg","w":1152,"h":2048},
+				{"src":"IMG (11B).jpg","w":2048,"h":1152},
+				{"src":"IMG (12).jpg","w":3264,"h":2240},
+				{"src":"IMG (13).jpg","w":3188,"h":2100},
+				{"src":"IMG (14).jpg","w":3264,"h":2280},
+				{"src":"IMG (15B).jpg","w":4160,"h":3120},
+				{"src":"IMG (15C).jpg","w":1200,"h":900},
+				{"src":"IMG (15D).jpg","w":1200,"h":900},
+				{"src":"IMG (5).jpg","w":4608,"h":2592},
+				{"src":"IMG (6).jpg","w":2048,"h":1152},
+				{"src":"IMG (7).jpg","w":2640,"h":1756},
+				{"src":"IMG (7B).jpg","w":1200,"h":858},
+				{"src":"IMG (8).jpg","w":2012,"h":1054},
+				//{"src":"IMG (82).JPG","w":1600,"h":1200},
+				//{"src":"IMG (83).JPG","w":1280,"h":960},
+				{"src":"IMG (91).jpg","w":2112,"h":1408}]}; 
 			var thumb = document.getElementById("id_thumb016");
 			thumb.onclick = function(){create_photoswipe(info.files, index_start, thumb);};
 			create_photoswipe(info.files, index_start, thumb);
