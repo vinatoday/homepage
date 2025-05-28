@@ -1,0 +1,159 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta property="og:type" content="website" />
+	<meta property="article:tag" content="flexbox" />
+	<meta charset="UTF-8" />
+	<link href="book.png" rel="shortcut icon" type="image/x-icon" />
+	<title>Links</title>
+	<style>
+		body {
+			position: absolute; left:0px; top:0px; width:100%; height:100%;
+			margin:0px; overflow-x: hidden;	overflow-y: hidden; 
+			font-family:Tahoma; font-size:10pt; 
+			background:#000; color:#FFFFFF;
+		}
+
+		#content {
+			position:fixed; z-index:661; left:0px; top:0px; width:100%; height:100%;
+			background-image: url('BG/bg.jpg');
+			background-repeat: no-repeat;
+			background-position: center center;
+			background-size: cover;
+			display: flex;
+			flex-direction:column; 
+			justify-content:center;
+		}
+
+		#viewgif {
+			margin:0 auto; width:90%; max-width:1000px;
+			height:90%; max-height:430px;
+			position: relative;
+		}
+		
+		#tabcontrol {
+			display: inline-block;
+			position:fixed; z-index:662; left:0; bottom:0; width:100%; height:42px; 
+			-webkit-user-select: none; 
+			-khtml-user-select: none; 
+			-moz-user-select: none;
+			text-align: center;
+		}
+		
+		#tabcontrol button {
+			border:none; padding:8px 15px; border-radius:16px;
+			background:rgb(0,0,0,0.8); color: #ccc; box-shadow: 0px 0px 5px #666;
+			cursor:pointer;
+		}
+		#tabcontrol button:hover {background: #333!important; color: #FFF!important;}
+
+		#bt_start:before {content: "🏡Trang đầu";}
+		#bt_page2html:before   {content: "📁page.html";}
+		
+		
+
+		@media only screen and (max-width: 820px){
+			content {display: block;}
+			#tabcontrol {height:62px; }
+			#tabcontrol button {padding:12px 14px; border-radius:20px;}
+			#viewgif img {height: 100px; width: auto;}
+			#viewgif {max-height:90%;}
+			
+			#bt_start:before {content: "🏡";}
+			#bt_page2html:before   {content: "📁";}
+
+		}	
+	</style>
+</head>
+<body>
+	<audio id="audio1" autoplay="no" loop="loop" controls="no" style="display:none"></audio>
+	<div id="content"><div id="viewgif">[]</div></div>
+	<div id="tabcontrol">
+		<button id="bt_page2html" onclick="mygif.pagehtml_next()"></button>
+		<button id="bt_start" onclick="mygif.page_begin(true)"></button>
+		<button onclick="mygif.page_next(false)">&lt;</button>
+		<button id="viewpage"></button>
+		<button id="bt_next" onclick="mygif.page_next(true)">&gt;</button>
+		<button id="bt_end" onclick="mygif.page_begin(false)">&gt;&gt;</button> 
+	</div>
+	
+	<script>
+		function start_mygif(){
+			var audio1 = document.getElementById("audio1");
+			var viewgif = document.getElementById('viewgif');
+			var viewpage = document.getElementById('viewpage');
+			document.getElementById("bt_next").focus();
+			
+			
+			function play_music(){
+				if (audio1.paused) audio1.play();
+			}
+			
+			var path, maxgif, maxpage;
+			var numgif = 14;
+			var pagehtml = 1;
+			var page = 1;
+			
+			function view_pagehtml(num){
+				pagehtml = num;
+				if (pagehtml === 1) {
+					path	= "N";
+					maxgif	= 257;
+					audio1.src = "BG/TomorrowPiano.mp3"; 
+				} else {
+					path	= "N2";
+					maxgif	= 125;
+					audio1.src = "BG/Raindrops.mp3"; 
+				}
+				maxpage = Math.floor(maxgif/numgif) + 1; 
+				if (maxgif % numgif == 0) maxpage--;
+				page = 1;
+			}
+			
+			
+			function view_page(num){
+				page = num;
+				var n = (page == 1) ? 0 : (page * numgif - numgif);
+				var s = "";
+				
+				for (var i=1; i <= numgif; i++){
+				   if (n < maxgif) n++; else break;
+				   s += '<img src="'+path+'/N ('+ n +').gif"> ';   
+				}
+				viewpage.innerHTML = page + '/' + maxpage;
+				viewgif.innerHTML  = s;
+				play_music();
+			}
+			
+			
+			this.page_next = function(is_next){ 
+				if ( is_next && (page + 1) > maxpage) return; else 
+				if (!is_next && (page - 1) < 1) return;
+				var num = (is_next)? page + 1 : page - 1;
+				view_page(num);
+			}
+				
+			this.page_begin = function(ok){
+				if ((ok && page === 1) || (!ok && page === maxpage)) return;
+				var num = ok ? 1 : maxpage;
+				view_page(num);
+			}
+			
+			
+			
+			this.pagehtml_next = function(){
+				var num = (pagehtml === 1)? 2 : 1;
+				view_pagehtml(num);
+				view_page(1);
+			}
+			//___________________________
+			view_pagehtml(1);
+			view_page(1);
+		}
+		//===============================================================================
+		var mygif = new start_mygif();
+	</script>
+</body>
+</html>
