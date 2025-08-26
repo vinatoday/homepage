@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<style>
+	html, body{
+		-webkit-user-select: none; 
+		-khtml-user-select: none; 
+		-moz-user-select: none;
+	}
+
+
+	body {margin:0; padding:0;}
+	#panel1 {
+		position:fixed; left:6px; top:10px; width: 260px; 
+		background:#4343a1; color:#fff; box-shadow: 0 0 15px #666;
+		
+	}
+	
+	#panel1 ul {margin:0; padding:10px 20px 30px 20px;}
+	#panel1 li {list-style:none;}
+	
+	.contents {
+		width:660px; margin:0 auto; 
+		background:#d2e9f1; 
+		box-shadow: 0 0 15px #666;
+		padding:0; border: none;
+		box-sizing: border-box;
+	}
+</style>
+
+<body>
+	<script>
+		new function(){
+			const about = "Datetime 20/5/2024.";
+			//----------------------------
+			function ___(id){return document.getElementById(id);}
+			function add(element, id=0, text=0, _class=0, type=0, placeholder=0, title=0){
+				element = document.createElement(element);
+				if (id) element.setAttribute("id", id);
+				if (type) element.setAttribute("type", type);
+				if (_class) element.setAttribute("class", _class);
+				if (placeholder) element.setAttribute("placeholder", placeholder);
+				if (title) element.setAttribute("title", title);
+				if (text) element.textContent = text;
+				element.add = add;
+				this.appendChild(element);
+				return element;
+			}
+			
+			
+			//______________________________________________________________________________________	
+			function setting_move(tab){
+				var start_drag, start_mouse;
+				tab.style.position = "fixed";
+				//-------------------------------------------------
+				function get_mouse(event){
+					event = event || window.event;
+					var x = event.pageX || event.clientX;
+					var y = event.pageY || event.clientY;
+					return {x: x, y: y};
+				}
+				
+				tab.onmousedown = function(event){
+					if (event.target.matches('input') || event.target.matches('button') || event.target.matches('textarea')) return;
+					start_drag  = tab.getBoundingClientRect();
+					start_mouse = get_mouse(event);
+					window.onmousemove = function(event){ //call by window.onmousemove()
+						var new_mouse = get_mouse(event);
+						var x = start_drag.left + (new_mouse.x - start_mouse.x);
+						var y = start_drag.top  + (new_mouse.y - start_mouse.y);
+						tab.style.left = x + "px";
+						tab.style.top  = y + "px";
+					};
+				};
+				tab.onmouseup = function(){
+					window.onmousemove = null;
+				};
+			}
+			
+			
+			
+			//_________________________________________________________________			
+			var myDocument = new function(){
+				var pageHtml = (document.documentElement || document.body);
+				var body1	 = null;
+				//------------------------------------
+				
+				this.scroll_to = function(element){
+					var screen   = pageHtml.clientHeight;
+					var element  = element.getBoundingClientRect();
+					var scrolled = pageHtml.scrollTop || window.pageYOffset; // da cuon
+					var scrollTo = scrolled + element.top; // cuon toi vitri element
+					
+					// go to center screen
+					//if (element.height < screen){
+					//	var center = (screen - element.height) / 2;
+					//	scrollTo  -= center;
+					//}
+					
+					pageHtml.scrollTop = scrollTo;
+				};
+				
+				this.scroll_top = function(){
+					pageHtml.scrollTop = 0;
+				};
+				
+				this.scroll_bottom = function(){
+					if (!body1) return alert("body1 is null..");
+					pageHtml.scrollTop = body1.height;
+				};
+				
+				this.getHeight = function(){
+					return (body1 ? body1.height : 0);
+				}
+				
+				
+				document.body.onload = function(event){
+					body1 = document.body.getBoundingClientRect();
+				};
+			}
+
+
+
+			
+			
+			
+			
+			//_________________________________________________________________
+			var body1 = document.body; body1.add = add;
+			
+			var panel1 = body1.add("div","panel1");	
+				new setting_move(panel1);
+				panel1 = panel1.add("ul");
+			
+			var view1  = panel1.add("li");
+			var view2  = panel1.add("li");
+			var tools  = panel1.add("li");
+			
+			
+			
+			
+			
+			var str = "<ol>"; for (var i = 1; i <= 120; i++) str += "<li>In line ..</li>"; str += "</ol>";
+				var content = body1.add("div",0,0,"contents"); content.innerHTML = str;
+				var page1  = body1.add("div",0,"Noi dung page1..","contents");
+				str = "<ol>"; for (var i = 1; i <= 120; i++) str += "<li>In line ..</li>"; str += "</ol>";
+				content = body1.add("div",0,0,"contents"); content.innerHTML = str;
+			
+			tools.add("button",0,"page1").onclick = function(){myDocument.scroll_to(page1);}
+			tools.add("button",0,"top").onclick = myDocument.scroll_top;
+			tools.add("button",0,"bottom").onclick = myDocument.scroll_bottom;
+			
+			
+			
+			
+			
+			
+			document.onscroll = function on_scroll(){
+				var screenHeight = Math.floor(document.documentElement.clientHeight);
+				var scrolled	 = Math.floor(document.documentElement.scrollTop || window.pageYOffset);
+				var rect		 = page1.getBoundingClientRect();
+				
+				view1.innerHTML = 
+					"* screenHeight: " + screenHeight
+					+ "<br>* bodyHeight: " + Math.floor(myDocument.getHeight())
+					+ "<br>* scrolled: "     + scrolled;
+				
+				
+				view2.innerHTML = "<br><br><br>*page1: "
+					+ "<br>left: "   + Math.floor(rect.left)
+					+ "<br>top: "    + Math.floor(rect.top)
+					+ "<br>width: "  + Math.floor(rect.width)
+					+ "<br>height: " + Math.floor(rect.height);
+					
+				//panel1.style.display = (scrolled > 320)? "block":"none";
+			};
+
+		}
+	</script>
+
+</body>
+</html>

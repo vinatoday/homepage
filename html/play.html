@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>youtube</title>
+<style>
+body {
+	background:#FFF; font-size:11px; color:#FDF9F0;font-family:Tahoma; margin:0px;
+	-webkit-user-select:none; -khtml-user-select:none; -moz-user-select:none;
+}
+iframe {width:100%; height:88%; background:#000;}
+ul {margin-top:0; padding-top:5px;}
+li {
+	background:#333; border:1px solid #2d4141;	border-image:initial;
+	border-radius: 25px;box-shadow: 0 1px 2px #2d4141;	margin: 1px;
+	line-height: 21px; padding-left:6px; padding-right:8px; text-shadow: 1px 2px 3px rgb(212, 97, 20); 
+	float:left;	list-style: none;	cursor: pointer;
+}
+li:hover {color:#ff3300!important}
+</style>
+</head>
+
+<body>
+<div style="width:100%; height:520px; margin-bottom:-5000px;">
+<iframe id="showtv" scrolling="no" frameborder="0"  
+	title="YouTube video player" 
+	allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+	allowfullscreen></iframe>
+<ul>
+	<li onclick="runYoutube('p-YpjlSEwHo')">Youtube</li>
+	<li onclick="runYoutube('UUinkijG72G87sn-mtaFJTbA')">VTC14</li>
+	<li onclick="runYoutube('PLxv6taYbRuB4FvKELONLARCrq_qHxHUSK')" style="margin-right:16px">ThờiTiết</li> 
+	<li onclick="runYoutube('UUo9aqNaHCiQwXraDPMC3ViQ')">QH</li>
+	<li onclick="runYoutube('UUPJfjHrW3-zIeSaZTgmckmg')">ND</li>
+	<li onclick="runYoutube('UUIg56SgvoZF8Qg0Jx_gh6Pg')">ANTV</li>
+</ul>
+</div>
+
+<script>
+var showtv= document.getElementById('showtv');
+var running='new';
+
+function runYoutube(s){
+	if (running == s) return; else running= s;
+	showtv.src= 'https://www.youtube.com/embed/' +s+'?autoplay=1';
+}
+
+var url= new String(document.location.search);
+var find= url.indexOf('?list=',0);
+var source= (find>=0)? url.substring(find+6,url.length):'p-YpjlSEwHo';
+runYoutube(source);
+</script>
+
+</body>
+</html>

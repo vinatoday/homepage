@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<meta property="article:tag" content="flexbox"/>
+	<meta charset="UTF-8"/>
+	<title>SimCat Info.</title>
+</head>
+
+<body>
+	<style>
+		body {
+			background: #8fafe0;
+			margin:0; padding: 10px 10px 220px 10px;
+		}
+		
+		.page-title {font-size: 20px; padding 0; margin 0;}
+		#contents {
+			display: block;
+			background:#fff;
+			box-shadow: 0 0 12px #666;
+			padding: 0 20px 50px 20px;
+		}
+		
+		#contents, #tab_simcat,  #show_ketqua {
+			font: normal normal 16px Times;
+			box-sizing: border-box;
+			width:100%; max-width: 800px;
+			margin:0px auto;
+		}
+		
+		.socat80 {
+			font: normal bold 12px Tahoma;
+			background: #fffae3;
+			box-shadow: 6px 2px 3px #b5afae;
+			padding: 6px 6px;
+			border: 1px solid #666;
+			border-radius: 100%;
+		}
+		
+		
+		
+		
+		
+		
+		#tab_simcat, #tab_ketqua_item {background: #FFF;}
+		#tab_ketqua_item {box-shadow: 0 0 8px #666;}
+		
+		
+		#view_sdt {
+			font: normal bold 16px Tahoma;
+			background: #fffae3;
+			border: 1px solid #666;
+			border-radius: 3px;
+			box-shadow: 2px 2px 12px #b5afae;
+			padding: 3px 10px;
+		}
+		
+		
+		
+		.form_simcat {
+			position:fixed; 
+			right:15px;
+			background: #fff;
+			padding: 2px;
+			border-radius: 6px;
+			box-shadow: 0 0 12px #666;
+		}
+		
+		.form_simcat button {
+			padding:7px 12px; background:#f0f0f0; border:1px solid #ccc;
+			border-radius:3px; box-shadow:0px 0px 3px #ccc; cursor:pointer;
+		}
+		.form_simcat button:hover {box-shadow:0px 0px 3px #000;}
+		
+		.form_simcat input {
+			width:180px;text-align:center; 
+			padding:8px 6px;margin-right:3px;
+		}
+		
+		#btn_clear {width:36px; margin-left:-38px; margin-right:5px;}
+		
+		#rowtop td {
+			background: #c2c2d0;
+			padding: 8px 0;
+			box-shadow: 2px 2px 6px #ccc;
+			text-align: center;
+			font-weight: bold;
+			border-radius: 3px;
+		}
+
+		.items-simcat td {border-bottom:1px dashed #666;}
+		
+		.items-simcat td:nth-child(1) {text-align: center; border-right: 1px solid #ccc;}
+		.items-simcat td:nth-child(2) {padding: 0 6px 0 6px; min-width: 30px; border-right: 1px solid #ccc;}
+		.items-simcat td:nth-child(3) {padding: 0 6px 0 6px;}
+		.items-simcat:nth-child(2) td {padding-top: 12px;}
+
+		tr[status="Cát"],		tr[status="Đại Cát"]	{color:blue;}
+		tr[status="Hung"],		tr[status="Đại Hung"]	{color:red;}
+		tr[status="Đại Cát"],	tr[status="Đại Hung"]	{font-weight:bold;}
+		
+		
+		#tab_nguhanh{ background:#f0f0f0; }
+		#tab_nguhanh td {
+			margin:0; padding:1px 6px; 
+			border-right:1px solid #666;
+			border-bottom:1px dotted #666;
+			text-align:center;
+			
+		}
+		
+		#show_ketqua {padding:30px 0 0 0;}
+		
+		@media only screen and (max-width: 879px){
+			#contents {padding: 1px 10px 50px 10px;}
+			.form_simcat {top:0;}
+		}
+		@media only screen and (min-width: 880px){
+			.form_simcat {bottom:0;}
+		}
+		
+	</style>	
+	<div id="contents">
+		<div style="padding: 26px 30px 20px 30px;color:#3808ac;">
+			<h1 class="page-title">1️⃣ Đối chiếu Sim cát bằng chia 80.</h1> 
+			<div>
+				Cách tính sim cát bằng cách chia 80 là một cách tính đơn giản và phổ biến. 
+				Cách tính này dựa trên ý nghĩa của các con số trong dãy số điện thoại.
+				Lấy 4 số cuối của số điện thoại chia cho 80 và lấy số dư rồi đối chiếu bảng dưới đây.
+			</div>
+		</div>
+		
+		<table id="tab_simcat">
+			<tr id="rowtop"><td>Số</td><td>Kết Quả</td><td>Nội Dung</td></tr>
+			<tr><td>00</td><td>Đại Cát</td><td>Vận mệnh tốt, mọi thứ thành công.</td></tr><tr><td>01</td><td>Cát</td><td>Phát triển công việc dẫn đến thành công.</td></tr><tr><td>02</td><td>Bình</td><td>Cuộc sống an bình, thư thái khi lớn tuổi.</td></tr><tr><td>03</td><td>Đại Cát</td><td>Thăng tiến vượt bậc, mọi chuyện thuận lợi.</td></tr><tr><td>04</td><td>Hung</td><td>Sự nghiệp không suôn sẻ, khó khăn và thị phi.</td></tr><tr><td>05</td><td>Đại Cát</td><td>Kinh doanh phát đạt, được biết đến và quyền uy.</td></tr><tr><td>06</td><td>Cát</td><td>Vận mệnh tốt, dễ đạt thành công.</td></tr><tr><td>07</td><td>Cát</td><td>Hiền lành và ôn hòa, mọi việc thành công.</td></tr><tr><td>08</td><td>Cát</td><td>Vượt qua khó khăn, trải qua thử thách sẽ thành công.</td></tr><tr><td>09</td><td>Hung</td><td>Kinh doanh tự lập có thể gặp thất bại.</td></tr><tr><td>10</td><td>Hung</td><td>Cố gắng nhiều nhưng không đạt được gì.</td></tr><tr><td>11</td><td>Cát</td><td>Phát triển bước từng bước, có quý nhân giúp đỡ.</td></tr><tr><td>12</td><td>Hung</td><td>Sức khỏe yếu đuối, thất bại ở mọi lĩnh vực.</td></tr><tr><td>13</td><td>Cát</td><td>Thành công với tài lộc và sự kính trọng.</td></tr><tr><td>14</td><td>Bình</td><td>Tự lực cánh sinh, được hưởng những gì thiên trả địa.</td></tr><tr><td>15</td><td>Cát</td><td>Mọi công việc lớn đều thành công mỹ mãn.</td></tr><tr><td>16</td><td>Đại Cát</td><td>Thành danh và danh tiếng lừng lẫy.</td></tr><tr><td>17</td><td>Cát</td><td>Mọi việc dễ dàng thành công với sự giúp đỡ.</td></tr><tr><td>18</td><td>Đại Cát</td><td>Mọi công việc suôn sẻ và thịnh vượng.</td></tr><tr><td>19</td><td>Hung</td><td>Xung đột và khó khăn trong quan hệ.</td></tr><tr><td>20</td><td>Đại Hung</td><td>Lo lắng và phân vân, khó thành công.</td></tr><tr><td>21</td><td>Cát</td><td>Trí tuệ và tập trung vào kinh doanh.</td></tr><tr><td>22</td><td>Hung</td><td>Có tài nhưng không sử dụng, khó thành công.</td></tr><tr><td>23</td><td>Đại Cát</td><td>Thành công và tên tuổi nổi tiếng.</td></tr><tr><td>24</td><td>Đại Cát</td><td>Tự lập dẫn đến thành công lớn.</td></tr><tr><td>25</td><td>Đại Cát</td><td>Nhân cách tốt mang lại điều kiện thuận lợi.</td></tr><tr><td>26</td><td>Hung</td><td>Gặp khó khăn nhưng vượt qua được.</td></tr><tr><td>27</td><td>Cát</td><td>Lúc thăng lúc trầm nhưng vẫn giữ thành công.</td></tr><tr><td>28</td><td>Đại Cát</td><td>Thăng tiến mạnh mẽ.</td></tr><tr><td>29</td><td>Hung</td><td>Lợi và hại đều đến, biến động trong cuộc sống.</td></tr><tr><td>30</td><td>Đại Cát</td><td>Danh lợi và thành công ồ ạt kéo về.</td></tr><tr><td>31</td><td>Đại Cát</td><td>Công danh tương lai như rồng gặp nước.</td></tr><tr><td>32</td><td>Cát</td><td>Sử dụng trí tuệ để phát triển và đạt thành công.</td></tr><tr><td>33</td><td>Hung</td><td>Liên tục rủi ro, khó thành công.</td></tr><tr><td>34</td><td>Bình</td><td>Vận mệnh bình dị, nhưng thường bảo thủ.</td></tr><tr><td>35</td><td>Hung</td><td>Cuộc đời rủi ro và không ổn định.</td></tr><tr><td>36</td><td>Cát</td><td>Tránh rủi ro và tiến thọ.</td></tr><tr><td>37</td><td>Bình</td><td>Danh tiếng nhưng không có lợi ích.</td></tr><tr><td>38</td><td>Đại Cát</td><td>Con đường đến thành công rộng mở.</td></tr><tr><td>39</td><td>Bình</td><td>Cuộc sống bất ổn và biến đổi.</td></tr><tr><td>40</td><td>Đại Cát</td><td>Thành công ở mọi lĩnh vực.</td></tr><tr><td>41</td><td>Hung</td><td>Sự nghiệp không suôn sẻ, khó thành công.</td></tr><tr><td>42</td><td>Cát</td><td>Nhẫn nhịn và kiên nhẫn có thể biến chuyện xấu thành tốt.</td></tr><tr><td>43</td><td>Cát</td><td>Thành công tự nhiên đến.</td></tr><tr><td>44</td><td>Hung</td><td>Tham lam dẫn đến thất bại.</td></tr><tr><td>45</td><td>Hung</td><td>Khó khăn ngày càng tăng.</td></tr><tr><td>46</td><td>Đại Cát</td><td>Thành công trọng đại và có người hỗ trợ.</td></tr><tr><td>47</td><td>Đại Cát</td><td>Có tiếng và vận may, mọi việc thành công.</td></tr><tr><td>48</td><td>Bình</td><td>Gặp may mắn hoặc xui xẻo tùy thuộc vào ý chí.</td></tr><tr><td>49</td><td>Bình</td><td>Thành công và thất bại đan xen.</td></tr><tr><td>50</td><td>Bình</td><td>Thành công song hối hả và cản trở.</td></tr><tr><td>51</td><td>Cát</td><td>Đường tới thành công mở rộng.</td></tr><tr><td>52</td><td>Hung</td><td>May mắn và xui xẻo xen kẽ.</td></tr><tr><td>53</td><td>Bình</td><td>Nỗ lực không đúng hướng, ít thành công.</td></tr><tr><td>54</td><td>Hung</td><td>Nguy cơ ẩn hiện dưới vẻ đẹp ngoại trừng.</td></tr><tr><td>55</td><td>Đại Hung</td><td>Thành công khó khăn và nhiều thách thức.</td></tr><tr><td>56</td><td>Cát</td><td>Nỗ lực và đam mê dẫn đến tài lộc.</td></tr><tr><td>57</td><td>Bình</td><td>Cuộc đời đầy biến động và khổ trước sướng sau.</td></tr><tr><td>58</td><td>Hung</td><td>Sự nản lòng và do dự dẫn đến thất bại.</td></tr><tr><td>59</td><td>Bình</td><td>Mục tiêu mơ hồ, thiếu hướng dẫn rõ ràng.</td></tr><tr><td>60</td><td>Hung</td><td>Mây mù che khuất, biểu hiện của rủi ro và khó khăn.</td></tr><tr><td>61</td><td>Hung</td><td>Lo lắng và không thành công trong mọi việc.</td></tr><tr><td>62</td><td>Cát</td><td>Mục tiêu rõ ràng và tập trung sẽ thành công.</td></tr><tr><td>63</td><td>Hung</td><td>Gặp nhiều khó khăn và trở ngại.</td></tr><tr><td>64</td><td>Cát</td><td>Tài lộc tự đến, thành công đến tay.</td></tr><tr><td>65</td><td>Bình</td><td>Gia đình không hoà thuận và đồng lòng.</td></tr><tr><td>66</td><td>Đại Cát</td><td>Vinh quang và thăng tiến sau nhiều khó khăn.</td></tr><tr><td>67</td><td>Cát</td><td>Nắm bắt cơ hội sẽ đem lại thành công.</td></tr><tr><td>68</td><td>Hung</td><td>Do dự và khó khăn, cuộc sống biến động.</td></tr><tr><td>69</td><td>Hung</td><td>Công việc đầy khó khăn và không thuận lợi.</td></tr><tr><td>70</td><td>Bình</td><td>Lợi và hại đều có, phụ thuộc vào quyết tâm.</td></tr><tr><td>71</td><td>Hung</td><td>Nhận và mất đi, khó có sự ổn định.</td></tr><tr><td>72</td><td>Cát</td><td>Sự yên bình tự đến và may mắn tự đến.</td></tr><tr><td>73</td><td>Bình</td><td>Thiếu kế hoạch, khó thành công.</td></tr><tr><td>74</td><td>Bình</td><td>Sự may mắn kèm theo rủi ro, đứng im sẽ tốt hơn.</td></tr><tr><td>75</td><td>Đại Hung</td><td>Liên tiếp gặp rủi ro, có thể phá sản.</td></tr><tr><td>76</td><td>Cát</td><td>Khó khăn và sau đó mới đạt được thành công.</td></tr><tr><td>77</td><td>Bình</td><td>Trang trọng nhưng không có gì.</td></tr><tr><td>78</td><td>Đại Cát</td><td>Tương lai tươi sáng, đầy hy vọng.</td></tr><tr><td>79</td><td>Hung</td><td>Gặp rồi lại mất, cứ lo lắng cũng không ích gì.</td></tr><tr><td>80</td><td>Đại Cát</td><td>Vận số tốt, thành công là điều dễ dàng.</td></tr> 
+		</table><br>
+		
+		
+		<div style="padding: 26px 30px 20px 30px">
+			<h1 class="page-title">2️⃣ Đối chiếu Sim cát theo mệnh.</h1>
+			<div style="color:#3808ac;">
+				Đây là cách tính sim cát dựa trên mối quan hệ tương sinh, tương khắc của ngũ hành. 
+				Theo cách tính này, sim cát là sim có mệnh tương sinh với mệnh của người sở hữu.
+				Hãy xác định mệnh của người sở hữu, và nên chọn những con số tương ứng dưới đây để hợp với mệnh của người sở hữu.
+				<br><br>
+			</div>
+			
+			<div style="padding-bottom:8px; color:blue;">
+				*Quan hệ tương sinh: <b>Kim >> Thủy >> Mộc >> Hỏa >> Thổ >> Kim</b>
+			</div>
+
+			<div style="color:red;">
+				*Quan hệ tương khắc: <b>Kim >> Mộc >> Thổ >> Thủy >> Hỏa >> Kim</b>
+			</div><br><br>
+
+			<table id="tab_nguhanh">
+				<tr><td>Kim</td><td>Mộc</td><td>Thủy</td><td>Hỏa</td><td>Thổ</td></tr>
+				<tr style="font: normal bold 12px Tahoma"><td>6 7</td><td>3 4</td><td>0 1</td><td>9</td><td>2 5 8</td></tr>
+			</table>
+		</div>
+		
+		
+	</div>
+	<script>
+		new function FIND_FOR_SIMCAT(){
+			const about = "Datetime: 21/5/2024.";
+			//-------------------------------------
+			
+			function strToInt(s) {var num = parseInt(s); return (isNaN(num))? 0 : num; }
+			function ___(id){ return document.getElementById(id); }
+			
+			function add(element, id=0, text=0, _class=0, type=0, placeholder=0, title=0){
+				element = document.createElement(element);
+				if (id) element.setAttribute("id", id);
+				if (type) element.setAttribute("type", type);
+				if (_class) element.setAttribute("class", _class);
+				if (placeholder) element.setAttribute("placeholder", placeholder);
+				if (title) element.setAttribute("title", title);
+				if (text) element.textContent = text;
+				element.add = add;
+				this.appendChild(element);
+				return element;
+			}
+			
+			var tab_simcat = new function(){
+				var items = document.querySelectorAll("#tab_simcat tr");
+				var len   = items.length;
+				function map(f){for (var i = 1; i < len; i++) f(items[i]);}
+				
+				map(function(item){ //dinh dang lai tab_simcat
+					var cells = item.querySelectorAll('td');
+					item.classList.add("items-simcat");
+					item.setAttribute('status',cells[1].textContent);
+					cells[0].innerHTML = "<span class='socat80'>"+cells[0].textContent+"</span>";
+					item.cells = cells;
+				});
+				this.map = map;
+			};
+
+
+			//_________________________________________________________________			
+			var myDocument = new function(){
+				var pageHtml = (document.documentElement || document.body);
+				var body1    = null;
+				//------------------------------------
+				this.scroll_to = function(element){
+					var screen   = document.documentElement.clientHeight;
+					var element  = element.getBoundingClientRect();
+					var scrolled = document.documentElement.scrollTop || window.pageYOffset; // da cuon
+					var scrollTo = scrolled + element.top; // cuon toi vitri element
+					if (element.height < screen){
+						var center = (screen - element.height) / 2;
+						scrollTo  -= center;
+					}
+					pageHtml.scrollTop = scrollTo;
+				};
+				
+				this.scroll_top = function(){
+					pageHtml.scrollTop = 0;
+				};
+				this.scroll_bottom = function(){
+					if (body1) pageHtml.scrollTop = body1.height;
+				};
+				
+				document.body.onload = function(event){
+					body1 = document.body.getBoundingClientRect();
+				};
+			}
+
+
+			
+			
+			//_________________________________________________________________			
+			function tongchuso(phone){
+				var kq = 0;
+				for (var i = 0; i < phone.length; i++) kq += strToInt(phone.charAt(i));
+				return kq;
+			}
+			
+			function view_phonenumber(phone){
+				var num2 = "",  n = 0;
+				for (var i = phone.length-1; i >= 0; i--) {
+					num2 = phone.charAt(i) + num2;
+					n++; if (n == 3 || n == 6) num2 = " " + num2;
+				}
+				var kq = (phone.length >= 10)? num2 : ".. " + num2;
+				return '<tr><td><b>*Số điện thoại</b></td><td id="view_sdt">' +kq+ '</td></tr>';
+				
+			}
+			
+			function tong_cacchuso(phone){
+				var kq = tongchuso(phone);
+				return '<tr><td>Tổng các chữ số:</td><td><b>' +kq+ '</b></td></tr>';
+			}
+			
+			
+			function thuoc_menh(phone){
+				var num = strToInt(phone);
+				while (num > 9) num = tongchuso(num+"");
+				var kq = "";
+					 if (num == 6 || num == 7) kq = "Kim";  
+				else if (num == 3 || num == 4) kq = "Mộc";
+				else if (num == 0 || num == 1) kq = "Thủy";
+				else if (num == 9) kq = "Hỏa";
+				else if (num == 2 || num == 5 || num == 8) kq = "Thổ";
+				return '<tr><td>Thuộc mệnh:</td><td><b>' +kq+ '('+num+')</b></td></tr>';
+			}
+			
+			
+			
+			function item_simcat(so_tim){
+				var kq = "";
+				tab_simcat.map(function(item){
+					var socat = strToInt(item.cells[0].textContent);
+					if (so_tim == socat) kq = "<table id='tab_ketqua_item'>" + item.outerHTML + "</table>";
+				});
+				return kq;
+			}
+			
+			
+			
+			//_________________________________________________________________
+			function view_ketqua(phoneNumber){
+				if (!phoneNumber) return alert("Hãy nhập số điện thoại..");
+				phoneNumber	= phoneNumber.replaceAll(/[^0-9]/g,"");
+				
+				const phone = phoneNumber;
+				if (phone.length < 4)	return alert("Cần ít nhất 4 số cuối..");
+				if (phone.length > 12)	return alert("Số quá lớn..");
+				
+				var socuoi4		= strToInt(phone.substr(phone.length-4, 4));
+				var sochia   	= socuoi4/80;
+				var phannguyen	= Math.floor(sochia);
+				var phantram	= sochia - phannguyen; // tuc 0,..
+				var so_tim		= Math.round(phantram*80); // [0..80],  === socuoi4 % 80
+				
+				if (so_tim != (socuoi4 % 80)) return alert(" [Bị lỗi không === socuoi4 % 80..]");
+				if (socuoi4 == 0) so_tim = 0; else if (so_tim == 0) so_tim = 80; //lay tu 1..80
+				
+				show_ketqua.innerHTML = "<table id='tab_ketqua'>"
+					+ view_phonenumber(phone)
+					+ tong_cacchuso(phone)
+					+ thuoc_menh(phone)+ "</table><br>" + item_simcat(so_tim);
+				myDocument.scroll_to(show_ketqua);
+			}
+			
+			
+			//_________________________________________________________________
+			//=======================================================================
+			var body1 			= document.body; body1.add = add;
+			var form1			= body1.add("div",0,0,"form_simcat");
+			var show_ketqua		= body1.add("div","show_ketqua");
+			
+			var phonenumber1 = form1.add("input",0,0,0,"text","Nhập số điện thoại");
+			form1.add("button","btn_clear","x").onclick = function(){phonenumber1.value ="";};
+			form1.add("button",0,"Kết Quả").onclick = function(){view_ketqua(phonenumber1.value);};
+			
+			phonenumber1.addEventListener("keypress", function on_enter(event){
+				var enter = (event.key === "Enter"); if (!enter) return;
+				event.preventDefault(); 
+				view_ketqua(phonenumber1.value);
+			});
+		}
+	</script>
+</body>
+</html>
