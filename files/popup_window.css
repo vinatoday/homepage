@@ -1,0 +1,178 @@
+/*_________________________________________________________________________
+	------------ POPUP WINDOW -----------------------------------*/
+.noselect {
+	-webkit-user-select: none; 
+	-khtml-user-select: none; 
+	-moz-user-select: none;
+}
+
+.img-icons {
+	display: inline-block;
+	width: 22px; height: 22px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;
+}
+
+#tabPopup {}
+.popup-window {
+	font: normal normal 14px Times;
+	position:fixed; 
+	width: auto; height: auto;	left:30%; top:26%;
+	background:#c2c2dd;
+	box-shadow: 0 0 12px #666;
+	border-radius: 3px;
+}
+
+.popup-caption {
+	position: relative;
+	font: normal bold 12px Tahoma;
+	cursor: move;
+	background: #666; color:white;
+	text-shadow: 1px 1px 1px #000;
+	display:flex; width:100%; height:36px;
+	flex-direction: column; 
+	justify-content: center;
+}
+
+.caption-wrap-center {}
+.caption-icon {margin: 4px 3px -4px 6px;}
+.caption-text {display:inline-block; height: 22px;}
+
+.caption-wrap-right {display: inline-block; float: right;}
+.popup-caption button {font: normal bold 12px Tahoma; margin-top:3px;}
+.caption-btn-close {color:red; margin-right:5px;}
+
+.popup-content {
+	position: relative;
+	display:block; width:auto; height:auto;
+}
+
+.popup-iframe {
+	box-sizing: border-box;
+	width: 520px; height: 320px;
+	background:white;
+	border:none; margin:0; padding:0;
+}
+
+.popup-resize {
+	position:absolute; 
+	width:34px; height:34px; bottom:0; right:0; 
+	cursor: nwse-resize;
+}
+
+.popup-locked {
+	position:absolute; 
+	left:0; top:0; width:100%; height:100%;
+	display: none;
+}
+
+#tabTaskbar {
+	position:fixed; z-index: 996; padding-bottom: 2px;
+	left: 0px; bottom: 0px; width:100%; height:auto; 
+	text-align:center;
+}
+
+.taskbar-button {
+	display:inline-block; width:auto; height:auto;
+	background:#8e8e8e;
+	position: relative; cursor: pointer; margin-right:2px;
+	border-radius : 6px;
+	box-shadow: 0 0 5px #666;
+	padding: 3px 6px;
+}
+
+.taskbar-icon {
+	margin-top: 3px; margin-bottom: -3px; 
+	margin-left:3px; margin-right:3px;
+}
+
+.taskbar-text {
+	font:12px Tahoma;
+	display: inline-block;
+	width: 50px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	color:#fff; padding-bottom:3px;
+}
+
+.taskbar-btn-close {
+	color:#ccc; margin:6px 0 0 3px; padding:0; 
+	background:none; border:none; float: right;
+	font: 10px Tahoma;
+}
+.taskbar-btn-close:hover {color: red;}
+
+
+
+.popup-window[status_window="normal"] {display:block;}
+.popup-window[status_window="mini"], .popup-window[status_window="close"] {display:none;}
+.popup-window[status_active="yes"] .popup-caption, .taskbar-button[status_active="yes"] {background: #1c69a6;}
+
+.taskbar-button[status_window="normal"], .taskbar-button[status_window="mini"] {display:inline-block;}
+.taskbar-button[status_window="close"] {display:none;}
+.taskbar-button[status_window="mini"]{background:#8e8e8e!important;}
+
+
+
+
+
+/*__________________________________________________________________________*/	
+context-menu {
+	display: block;
+	margin:0; padding: 3px 3px 20px 3px;
+	position:fixed; z-index:998;
+	background:#f0f0f0; 
+	min-width:160px; max-width:260px; min-height:80px;
+	border-radius: 3px;
+	left:-600px;
+	top:-600px;
+	box-shadow: 2px 3px 6px #928585;
+	border:1px solid #ccc;
+}
+
+context-item {
+	display: block;
+    font: 15px Tahoma;
+    color: #042b9b;
+    list-style: none;
+    padding: 6px 10px 6px 10px;
+    border-bottom: 1px dotted #666;
+	cursor: pointer;
+	border-radius: 3px;
+	margin: 0 3px;
+	overflow: hidden;
+}
+
+context-item:hover {
+	background:#1d61ec; color:#fff;
+	text-shadow:none;
+}
+
+
+/*__________________________________________________________________________*/	
+#selector1 {
+	position:fixed; z-index:999;
+	background: rgba(0,0,255,.25); border:1px solid #9933FF;
+	left:20px;top:20px;width:20px;height:20px;
+}
+.items[selected="yes"] {background:rgba(0,0,255,0.25); border-radius:3px;}
+
+
+
+
+
+
+
+
+
+
+/*=========================================================================================*/
+@media only screen and (max-width: 820px){
+	.popup-window {
+		width: 100%; height: 100%;	left:0; top:0;
+		.addressbar-sitename { margin:0; padding:3px 0 6px 22px; }
+	}
+	.popup-content, .popup-iframe {width: 100%; height: 100%;}
+}

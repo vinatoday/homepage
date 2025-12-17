@@ -1,0 +1,146 @@
+html, document, body, #mainTab {
+	position: absolute; margin:0; padding:0; 
+	width:100%; height:100%; left:0; top:0; right:0; bottom:0; 
+	font:12px Tahoma, Times; color:#000;
+}
+
+body {
+	background: #709264;
+	color: black;
+}
+
+#mainTab {
+	background-color: #153A00;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;
+	/*	background-image: url("files/bg.jpg");	*/
+	display: flex;
+	flex-direction:column; 
+	justify-content:center;
+}
+	
+#container {
+	position: relative;
+	box-sizing: border-box;
+	margin:0 auto; width:90%; max-width:800px;
+	height:90%; max-height:430px;
+}
+
+
+
+#addressBar, #listview {
+	display: inline-block; width: 100%;
+	box-sizing: border-box;
+	border-radius: 6px;
+	padding-top:10px;
+}
+
+#addressBar {
+	background: #ffffff42; color:#fff; 
+	box-shadow: 1px 1px 3px #666; position: relative;
+	text-shadow: 1px 1px 1px #000;
+	padding: 5px 0; overflow: hidden;
+}
+.addressbar-sitename { margin:0; padding:0 0 3px 22px; }
+
+
+
+.addressbar-btn-owner {
+	position: absolute; 
+	right:0; top: 0; width: 36px; height: 100%;
+}
+.addressbar-btn-owner:before {
+	font: normal bold 14px Tahoma; text-decoration: none;
+	color: #fff;
+	position: absolute;
+	content: "...";
+	bottom: 40%; right: 8px;
+}
+
+
+
+
+.addressbar-wrap-edit {
+	position:absolute; left:0; top:0; width: 100%; height:100%; 
+	display: none;
+}
+.addressbar-edit {
+	box-sizing: border-box; width: 100%; height:100%;
+	padding: 0 50px 0 20px; font: normal normal 14px Tahoma;
+}
+.addressbar-btn-go {
+	position: absolute; right:6px; top:9px; bottom: 9px;
+	border:none; background:blue; color:white;
+	border-radius:6px;
+	box-shadow:0 0 6px #666;
+	cursor:pointer;
+}
+
+
+
+.tablink-icons {
+	float:left; width:90px; height:100px;
+	box-sizing:border-box; text-align:center;
+	position: relative; color:#fff; text-shadow:2px 2px 2px #000;
+	text-decoration:none;
+	font-weight:bold;
+	padding-top:8px;
+}
+.tablink-icons:hover {background: rgba(0,0,255,.25); border:1px solid #9933FF; cursor:pointer;}
+.tablink-icons #img {
+	display: inline-block; width:66px; height:66px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;
+}
+
+
+.tablink-icons i {
+	position: absolute; right:12px; top:18px;
+	font: 12px Tahoma;
+	background: red;
+	color: yellow;
+	border-radius: 12px;
+	padding: 1px 5px;
+}
+.tablink-icons span {
+	display:inline-block;
+	width: 80%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+
+
+
+#selector1 {
+	position:fixed; z-index:999;
+	background: rgba(0,0,255,.25); border:1px solid #9933FF;
+	left:20px;top:20px;width:20px;height:20px;
+}
+
+.tablink-icons[selected="yes"]{
+	background: rgba(0,0,255,.25); border:1px solid #9933FF;
+}
+
+
+
+
+
+
+	/*
+	=========================================================================================
+	____________________________________________________________________________
+	*/
+@media only screen and (max-width: 820px){
+	#container	{width:auto; max-width:auto; height:auto; max-height:auto; padding: 0 15px;}
+	#addressBar {padding: 6px 0;}
+	#listview	{padding-top:20px;}
+}
+
+@media only screen and (max-height: 520px){
+	#mainTab {display: block;}
+}
+
