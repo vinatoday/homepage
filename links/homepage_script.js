@@ -87,7 +87,12 @@ class start_window extends Listview {
 		site_name.onclick((event) => { edit_open(); });
 		btn_go.onclick((event) => { goto_website(edit.element.value); });
 		edit.element.addEventListener("keypress", (event) => {
-			if (event.key === "Enter"){ event.preventDefault(); goto_website(edit.value); }
+			if (event.keyCode === 13){
+				const search = edit.element.value;
+				event.preventDefault();
+				goto_website(search);
+			}
+		
 		});
 		
 		var menu = new ContextMenu(site_name);
