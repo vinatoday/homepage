@@ -3,164 +3,165 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lịch vuốt mượt</title>
+<title>Lịch mượt Native</title>
 
 <style>
-    body {
-        margin: 0;
-        overflow: hidden;
-        font-family: Arial, sans-serif;
-        background: #f0f2f5;
-        touch-action: pan-y;
-    }
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    background: #f0f2f5;
+}
 
-    .calendar-container {
-        display: flex;
-        width: 300vw;
-        height: 100vh;
-    }
+.calendar {
+    display: flex;
+    height: 100vh;
+    width: 300vw;
+    touch-action: pan-y;
+    cursor: grab;
+}
 
-    .day-page {
-        width: 100vw;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background: white;
-    }
+.calendar:active {
+    cursor: grabbing;
+}
 
-    .date {
-        font-size: 28px;
-        font-weight: bold;
-    }
+.page {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    user-select: none;
+}
 
-    .weekday {
-        font-size: 20px;
-        margin-top: 10px;
-        color: gray;
-    }
+.date {
+    font-size: 28px;
+    font-weight: bold;
+}
 
-    .hint {
-        position: absolute;
-        bottom: 20px;
-        width: 100%;
-        text-align: center;
-        font-size: 14px;
-        color: gray;
-    }
+.weekday {
+    font-size: 20px;
+    margin-top: 10px;
+    color: gray;
+}
 </style>
 </head>
 <body>
 
-<div id="calendar" class="calendar-container"></div>
-<div class="hint">Vuốt trái / phải kiểu iOS</div>
+<div id="calendar" class="calendar">
+    <div class="page" id="prev"></div>
+    <div class="page" id="current"></div>
+    <div class="page" id="next"></div>
+</div>
 
 <script>
 const calendar = document.getElementById("calendar");
+const prevPage = document.getElementById("prev");
+const currentPage = document.getElementById("current");
+const nextPage = document.getElementById("next");
 
 let currentDate = new Date();
-let currentTranslate = -window.innerWidth;
+let width = window.innerWidth;
+let baseTranslate = -width;
+let currentTranslate = baseTranslate;
+
 let startX = 0;
 let currentX = 0;
 let startTime = 0;
 let isDragging = false;
 
-function createDayPage(date) {
-    const page = document.createElement("div");
-    page.className = "day-page";
+/* ===== Render chỉ update text ===== */
 
-    const dateEl = document.createElement("div");
-    dateEl.className = "date";
-    dateEl.textContent = date.toLocaleDateString("vi-VN");
-
-    const weekdayEl = document.createElement("div");
-    weekdayEl.className = "weekday";
-    weekdayEl.textContent = date.toLocaleDateString("vi-VN", { weekday: "long" });
-
-    page.appendChild(dateEl);
-    page.appendChild(weekdayEl);
-    return page;
+function updatePage(page, date) {
+    page.innerHTML = `
+        <div class="date">${date.toLocaleDateString("vi-VN")}</div>
+        <div class="weekday">${date.toLocaleDateString("vi-VN", { weekday: "long" })}</div>
+    `;
 }
 
-function renderDays(centerDate) {
-    calendar.innerHTML = "";
+function updateAllPages() {
+    const prevDate = new Date(currentDate);
+    prevDate.setDate(prevDate.getDate() - 1);
 
-    for (let i = -1; i <= 1; i++) {
-        let d = new Date(centerDate);
-        d.setDate(d.getDate() + i);
-        calendar.appendChild(createDayPage(d));
-    }
+    const nextDate = new Date(currentDate);
+    nextDate.setDate(nextDate.getDate() + 1);
 
-    currentTranslate = -window.innerWidth;
-    setTranslate(currentTranslate);
+    updatePage(prevPage, prevDate);
+    updatePage(currentPage, currentDate);
+    updatePage(nextPage, nextDate);
 }
 
 function setTranslate(x) {
     calendar.style.transform = `translateX(${x}px)`;
 }
 
-function animateTo(x) {
-    calendar.style.transition = "transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1)";
-    setTranslate(x);
-    setTimeout(() => {
-        calendar.style.transition = "none";
-    }, 350);
-}
+/* ===== Khởi tạo ===== */
 
-renderDays(currentDate);
+updateAllPages();
+setTranslate(baseTranslate);
 
-calendar.addEventListener("touchstart", e => {
+/* ===== Pointer Events ===== */
+
+calendar.addEventListener("pointerdown", e => {
     isDragging = true;
-    startX = e.touches[0].clientX;
+    startX = e.clientX;
     startTime = Date.now();
     calendar.style.transition = "none";
+    calendar.setPointerCapture(e.pointerId);
 });
 
-calendar.addEventListener("touchmove", e => {
+calendar.addEventListener("pointermove", e => {
     if (!isDragging) return;
 
-    currentX = e.touches[0].clientX;
+    currentX = e.clientX;
     let delta = currentX - startX;
-
-    // resistance effect
-    let resistance = delta * 0.9;
-
-    setTranslate(currentTranslate + resistance);
+    setTranslate(baseTranslate + delta);
 });
 
-calendar.addEventListener("touchend", () => {
+calendar.addEventListener("pointerup", () => {
     if (!isDragging) return;
     isDragging = false;
 
     let delta = currentX - startX;
     let duration = Date.now() - startTime;
-    let velocity = delta / duration; // px per ms
+    let velocity = delta / duration;
 
-    let width = window.innerWidth;
-    let shouldChange = false;
+    let shouldChange =
+        Math.abs(delta) > width / 3 ||
+        Math.abs(velocity) > 0.5;
 
-    if (Math.abs(delta) > width / 3 || Math.abs(velocity) > 0.5) {
-        shouldChange = true;
-    }
+    calendar.style.transition =
+        "transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1)";
 
     if (shouldChange) {
         if (delta < 0) {
-            animateTo(-2 * width);
+            setTranslate(-2 * width);
             setTimeout(() => {
                 currentDate.setDate(currentDate.getDate() + 1);
-                renderDays(currentDate);
+                updateAllPages();
+                setTranslate(baseTranslate);
+                calendar.style.transition = "none";
             }, 300);
         } else {
-            animateTo(0);
+            setTranslate(0);
             setTimeout(() => {
                 currentDate.setDate(currentDate.getDate() - 1);
-                renderDays(currentDate);
+                updateAllPages();
+                setTranslate(baseTranslate);
+                calendar.style.transition = "none";
             }, 300);
         }
     } else {
-        animateTo(-width);
+        setTranslate(baseTranslate);
     }
+});
+
+window.addEventListener("resize", () => {
+    width = window.innerWidth;
+    baseTranslate = -width;
+    setTranslate(baseTranslate);
 });
 </script>
 
