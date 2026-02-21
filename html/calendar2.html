@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lịch vuốt mượt</title>
+
+<style>
+    body {
+        margin: 0;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+        background: #f0f2f5;
+        touch-action: pan-y;
+    }
+
+    .calendar-container {
+        display: flex;
+        width: 300vw;
+        height: 100vh;
+    }
+
+    .day-page {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: white;
+    }
+
+    .date {
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .weekday {
+        font-size: 20px;
+        margin-top: 10px;
+        color: gray;
+    }
+
+    .hint {
+        position: absolute;
+        bottom: 20px;
+        width: 100%;
+        text-align: center;
+        font-size: 14px;
+        color: gray;
+    }
+</style>
+</head>
+<body>
+
+<div id="calendar" class="calendar-container"></div>
+<div class="hint">Vuốt trái / phải kiểu iOS</div>
+
+<script>
+const calendar = document.getElementById("calendar");
+
+let currentDate = new Date();
+let currentTranslate = -window.innerWidth;
+let startX = 0;
+let currentX = 0;
+let startTime = 0;
+let isDragging = false;
+
+function createDayPage(date) {
+    const page = document.createElement("div");
+    page.className = "day-page";
+
+    const dateEl = document.createElement("div");
+    dateEl.className = "date";
+    dateEl.textContent = date.toLocaleDateString("vi-VN");
+
+    const weekdayEl = document.createElement("div");
+    weekdayEl.className = "weekday";
+    weekdayEl.textContent = date.toLocaleDateString("vi-VN", { weekday: "long" });
+
+    page.appendChild(dateEl);
+    page.appendChild(weekdayEl);
+    return page;
+}
+
+function renderDays(centerDate) {
+    calendar.innerHTML = "";
+
+    for (let i = -1; i <= 1; i++) {
+        let d = new Date(centerDate);
+        d.setDate(d.getDate() + i);
+        calendar.appendChild(createDayPage(d));
+    }
+
+    currentTranslate = -window.innerWidth;
+    setTranslate(currentTranslate);
+}
+
+function setTranslate(x) {
+    calendar.style.transform = `translateX(${x}px)`;
+}
+
+function animateTo(x) {
+    calendar.style.transition = "transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1)";
+    setTranslate(x);
+    setTimeout(() => {
+        calendar.style.transition = "none";
+    }, 350);
+}
+
+renderDays(currentDate);
+
+calendar.addEventListener("touchstart", e => {
+    isDragging = true;
+    startX = e.touches[0].clientX;
+    startTime = Date.now();
+    calendar.style.transition = "none";
+});
+
+calendar.addEventListener("touchmove", e => {
+    if (!isDragging) return;
+
+    currentX = e.touches[0].clientX;
+    let delta = currentX - startX;
+
+    // resistance effect
+    let resistance = delta * 0.9;
+
+    setTranslate(currentTranslate + resistance);
+});
+
+calendar.addEventListener("touchend", () => {
+    if (!isDragging) return;
+    isDragging = false;
+
+    let delta = currentX - startX;
+    let duration = Date.now() - startTime;
+    let velocity = delta / duration; // px per ms
+
+    let width = window.innerWidth;
+    let shouldChange = false;
+
+    if (Math.abs(delta) > width / 3 || Math.abs(velocity) > 0.5) {
+        shouldChange = true;
+    }
+
+    if (shouldChange) {
+        if (delta < 0) {
+            animateTo(-2 * width);
+            setTimeout(() => {
+                currentDate.setDate(currentDate.getDate() + 1);
+                renderDays(currentDate);
+            }, 300);
+        } else {
+            animateTo(0);
+            setTimeout(() => {
+                currentDate.setDate(currentDate.getDate() - 1);
+                renderDays(currentDate);
+            }, 300);
+        }
+    } else {
+        animateTo(-width);
+    }
+});
+</script>
+
+</body>
+</html>
