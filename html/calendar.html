@@ -56,26 +56,28 @@ body {
     <div class="page" id="next"></div>
 </div>
 
+
+
+
 <script>
 	const calendar = document.getElementById("calendar");
-	const prevPage = document.getElementById("prev");
-	const currentPage = document.getElementById("current");
-	const nextPage = document.getElementById("next");
+
+	let prevPage = document.getElementById("prev");
+	let currentPage = document.getElementById("current");
+	let nextPage = document.getElementById("next");
 
 	let currentDate = new Date();
 	let width = window.innerWidth;
 	let baseTranslate = -width;
-	let currentTranslate = baseTranslate;
 
 	let startX = 0;
 	let currentX = 0;
 	let startTime = 0;
 	let isDragging = false;
-	
-	
+	let direction = 0; // -1 = prev, 1 = next
 
-	/* ===== Render chỉ update text ===== */
-	function setTranslate(x) {
+	/* ===== Render ===== */
+		function setTranslate(x) {
 		calendar.style.transform = "translateX(" + x + "px)";
 	}
 
@@ -86,9 +88,10 @@ body {
 		page.innerHTML = '<div class="date">'   + date1  +'</div>'
 						+'<div class="weekday">'+ weekly +'</div>';
 	}
-	
-	
-	function updatePages() {
+
+
+	/* ===== Khởi tạo ban đầu ===== */
+	function initPages() {
 		const prevDate = new Date(currentDate);
 		const nextDate = new Date(currentDate);
 		prevDate.setDate(prevDate.getDate() - 1);
@@ -97,88 +100,121 @@ body {
 		viewPage(prevPage, prevDate);
 		viewPage(currentPage, currentDate);
 		viewPage(nextPage, nextDate);
+
+		setTranslate(baseTranslate);
+	}
+
+	initPages();
+
+	/* ===== Swipe logic ===== */
+	calendar.addEventListener("pointerdown", e => {
+		isDragging = true;
+		startX = e.clientX;
+		currentX = e.clientX;
+		startTime = Date.now();
+		calendar.style.transition = "none";
+		calendar.setPointerCapture(e.pointerId);
+	});
+
+	calendar.addEventListener("pointermove", e => {
+		if (!isDragging) return;
+		currentX = e.clientX;
+		const delta = currentX - startX;
+		setTranslate(baseTranslate + delta);
+	});
+
+	calendar.addEventListener("pointerup", () => {
+		if (!isDragging) return;
+		isDragging = false;
+
+		const delta = currentX - startX;
+		const duration = Date.now() - startTime;
+		const velocity = delta / duration;
+		const shouldChange = Math.abs(delta) > width / 3 || Math.abs(velocity) > 0.5;
+
+		calendar.style.transition = "transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1)";
+		if (shouldChange) {
+			if (delta < 0) {
+				direction = 1;
+				setTranslate(-2 * width);
+			} else {
+				direction = -1;
+				setTranslate(0);
+			}
+		} else {
+			direction = 0;
+			setTranslate(baseTranslate);
+		}
+	});
+
+
+
+	calendar.addEventListener("transitionend", () => { //Sau khi animation kết thúc
+		if (direction === 0) return;
+		if (direction === 1) {
+			moveNext();
+		} else {
+			movePrev();
+		}
+		direction = 0;
+	});
+
+	
+	
+	
+	function moveNext() {
+		currentDate.setDate(currentDate.getDate() + 1);
+		calendar.appendChild(prevPage);// Đưa prev ra cuối
+
+		const oldPrev = prevPage;
+		prevPage = currentPage;
+		currentPage = nextPage;
+		nextPage = oldPrev;
+
+		const newNextDate = new Date(currentDate);
+		newNextDate.setDate(newNextDate.getDate() + 1);
+		viewPage(nextPage, newNextDate);
+
+		calendar.style.transition = "none";
+		setTranslate(baseTranslate);
+	}
+
+
+
+
+	function movePrev() {
+		currentDate.setDate(currentDate.getDate() - 1);
+
+		calendar.insertBefore(nextPage, calendar.firstChild);// Đưa next lên đầu
+
+		const oldNext = nextPage;
+		nextPage = currentPage;
+		currentPage = prevPage;
+		prevPage = oldNext;
+
+		const newPrevDate = new Date(currentDate);
+		newPrevDate.setDate(newPrevDate.getDate() - 1);
+		viewPage(prevPage, newPrevDate);
+
+		calendar.style.transition = "none";
+		setTranslate(baseTranslate);
 	}
 
 
 
 
 
-	/* ===== Khởi tạo ===== */
-	updatePages();
-	setTranslate(baseTranslate);
-	
-	
-	
-	
 
-	/* ===== Pointer Events ===== */
-	calendar.addEventListener("pointerdown", e => {
-		isDragging = true;
-		startX = e.clientX;
-		startTime = Date.now();
-		calendar.style.transition = "none";
-		calendar.setPointerCapture(e.pointerId);
-	});
-	
-	
-	
-	
-
-	calendar.addEventListener("pointermove", e => {
-		if (!isDragging) return;
-		currentX = e.clientX;
-		let delta = currentX - startX;
-		setTranslate(baseTranslate + delta);
-	});
-
-
-
-
-
-	calendar.addEventListener("pointerup", () => {
-		if (!isDragging) return; isDragging = false;
-		let delta = currentX - startX;
-		let duration = Date.now() - startTime;
-		let velocity = delta / duration;
-		let shouldChange = (Math.abs(delta) > width / 3 || Math.abs(velocity) > 0.5);
-		calendar.style.transition = "transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1)";
-
-		if (shouldChange) {
-			if (delta < 0) {
-				setTranslate(-2 * width);
-				setTimeout(() => {
-					currentDate.setDate(currentDate.getDate() + 1);
-					updatePages();
-					setTranslate(baseTranslate);
-					calendar.style.transition = "none";
-				}, 300);
-				
-			} else {
-				setTranslate(0);
-				setTimeout(() => {
-					currentDate.setDate(currentDate.getDate() - 1);
-					updatePages();
-					setTranslate(baseTranslate);
-					calendar.style.transition = "none";
-				}, 300);
-			}
-			
-		} else {
-			setTranslate(baseTranslate);
-		}
-	});
-	
-	
-	
-	
-	
-
+	/* ===== Resize ===== */
 	window.addEventListener("resize", () => {
 		width = window.innerWidth;
 		baseTranslate = -width;
 		setTranslate(baseTranslate);
 	});
 </script>
+
+
+
 
 </body>
 </html>
