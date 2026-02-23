@@ -6,75 +6,74 @@
 <title>Lịch mượt Native</title>
 
 <style>
-body {
-    margin: 0;
-    overflow: hidden;
-    font-family: Arial, sans-serif;
-    background: #f0f2f5;
-}
+	body {
+		margin: 0;
+		overflow: hidden;
+		font-family: Arial, sans-serif;
+		background: white;
+	}
 
-.calendar {
-    display: flex;
-    height: 100vh;
-    width: 300vw;
-    touch-action: pan-y;
-    cursor: grab;
-}
+	.calendar {
+		display: flex;
+		height: 100vh;
+		width: 300vw;
+		touch-action: pan-y;
+		cursor: grab;
+		will-change: transform;
+	}
 
-.calendar:active {
-    cursor: grabbing;
-}
+	.calendar:active {
+		cursor: grabbing;
+	}
 
-.page {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: white;
-    user-select: none;
-}
+	.page {
+		width: 100vw;
+		height: 100vh;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		background: white;
+		user-select: none;
+	}
 
-.date {
-    font-size: 28px;
-    font-weight: bold;
-}
+	.date {
+		font-size: 28px;
+		font-weight: bold;
+	}
 
-.weekday {
-    font-size: 20px;
-    margin-top: 10px;
-    color: gray;
-}
+	.weekday {
+		font-size: 20px;
+		margin-top: 10px;
+		color: gray;
+	}
 </style>
 </head>
 <body>
+	<div id="calendar" class="calendar">
+		<div class="page" order="0" id="prev"></div>
+		<div class="page" order="1" id="current"></div>
+		<div class="page" order="2" id="next"></div>
+	</div>
+	<script>
+	new function PageCalendar(){
+	const calendar	= document.getElementById("calendar");
+	let prevPage	= document.getElementById("prev");
+	let currentPage	= document.getElementById("current");
+	let nextPage	= document.getElementById("next");
 
-<div id="calendar" class="calendar">
-    <div class="page" id="prev"></div>
-    <div class="page" id="current"></div>
-    <div class="page" id="next"></div>
-</div>
+	let currentDate		= new Date();
+	let width			= window.innerWidth;
+	let baseTranslate	= -width;
+
+	let startX		= 0;
+	let currentX	= 0;
+	let startTime	= 0;
+	let isDragging	= false;
+	let direction	= 0; //<Hướng move (-1 = prev, 1 = next)
 
 
 
-
-<script>
-	const calendar = document.getElementById("calendar");
-
-	let prevPage = document.getElementById("prev");
-	let currentPage = document.getElementById("current");
-	let nextPage = document.getElementById("next");
-
-	let currentDate = new Date();
-	let width = window.innerWidth;
-	let baseTranslate = -width;
-
-	let startX = 0;
-	let currentX = 0;
-	let startTime = 0;
-	let isDragging = false;
-	let direction = 0; // -1 = prev, 1 = next
 
 	/* ===== Render ===== */
 		function setTranslate(x) {
@@ -96,43 +95,65 @@ body {
 		const nextDate = new Date(currentDate);
 		prevDate.setDate(prevDate.getDate() - 1);
 		nextDate.setDate(nextDate.getDate() + 1);
-
+		
 		viewPage(prevPage, prevDate);
 		viewPage(currentPage, currentDate);
 		viewPage(nextPage, nextDate);
-
+		
 		setTranslate(baseTranslate);
 	}
 
 	initPages();
+	
+	
+	
+
+
 
 	/* ===== Swipe logic ===== */
-	calendar.addEventListener("pointerdown", e => {
+	function getClientX(e) {
+		if (e.touches && e.touches.length) {
+			return e.touches[0].clientX;
+		}
+		if (e.changedTouches && e.changedTouches.length) {
+			return e.changedTouches[0].clientX;
+		}
+		return e.clientX;
+	}
+	
+	function setOrders(p, c, n){
+		p.style.order = 0;
+		c.style.order = 1;
+		n.style.order = 2;
+	}
+
+	function touchStart(e){
 		isDragging = true;
-		startX = e.clientX;
-		currentX = e.clientX;
+		startX = getClientX(e);
+		currentX = startX;
 		startTime = Date.now();
 		calendar.style.transition = "none";
-		calendar.setPointerCapture(e.pointerId);
-	});
+	}
 
-	calendar.addEventListener("pointermove", e => {
+	function touchMove(e){
 		if (!isDragging) return;
-		currentX = e.clientX;
+		currentX = getClientX(e);
 		const delta = currentX - startX;
 		setTranslate(baseTranslate + delta);
-	});
+	}
 
-	calendar.addEventListener("pointerup", () => {
+	function touchEnd(e){
 		if (!isDragging) return;
 		isDragging = false;
 
+		currentX = getClientX(e);
 		const delta = currentX - startX;
 		const duration = Date.now() - startTime;
 		const velocity = delta / duration;
 		const shouldChange = Math.abs(delta) > width / 3 || Math.abs(velocity) > 0.5;
 
 		calendar.style.transition = "transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1)";
+
 		if (shouldChange) {
 			if (delta < 0) {
 				direction = 1;
@@ -145,61 +166,58 @@ body {
 			direction = 0;
 			setTranslate(baseTranslate);
 		}
-	});
+	}
+	
+	
+	
+	calendar.addEventListener("transitionend", () => { //After animation
+		if(direction === 0) return;
+		calendar.style.transition = "none";
 
+		if(direction === 1){ // NEXT
+			currentDate.setDate(currentDate.getDate() + 1);
+			const newNextDate = new Date(currentDate);
+			newNextDate.setDate(newNextDate.getDate() + 1);
+			viewPage(prevPage, newNextDate);
 
+			// rotate order
+			const temp = prevPage;
+			prevPage = currentPage;
+			currentPage = nextPage;
+			nextPage = temp;
 
-	calendar.addEventListener("transitionend", () => { //Sau khi animation kết thúc
-		if (direction === 0) return;
-		if (direction === 1) {
-			moveNext();
-		} else {
-			movePrev();
+		}else{ // PREV
+			currentDate.setDate(currentDate.getDate() - 1);
+			const newPrevDate = new Date(currentDate);
+			newPrevDate.setDate(newPrevDate.getDate() - 1);
+			viewPage(nextPage, newPrevDate);
+
+			const temp = nextPage;
+			nextPage = currentPage;
+			currentPage = prevPage;
+			prevPage = temp;
 		}
+
+		setOrders(prevPage, currentPage, nextPage);
+		setTranslate(baseTranslate);
 		direction = 0;
-	});
+	});	
 
+	
+	if (window.PointerEvent) {
+		calendar.addEventListener("pointerdown", touchStart);
+		calendar.addEventListener("pointermove", touchMove);
+		calendar.addEventListener("pointerup", touchEnd);
+		calendar.addEventListener("pointercancel", touchEnd);
+	} else {
+		calendar.addEventListener("touchstart", touchStart, { passive: true });
+		calendar.addEventListener("touchmove", touchMove, { passive: true });
+		calendar.addEventListener("touchend", touchEnd);
+		calendar.addEventListener("touchcancel", touchEnd);
+	}	
 	
 	
 	
-	function moveNext() {
-		currentDate.setDate(currentDate.getDate() + 1);
-		calendar.appendChild(prevPage);// Đưa prev ra cuối
-
-		const oldPrev = prevPage;
-		prevPage = currentPage;
-		currentPage = nextPage;
-		nextPage = oldPrev;
-
-		const newNextDate = new Date(currentDate);
-		newNextDate.setDate(newNextDate.getDate() + 1);
-		viewPage(nextPage, newNextDate);
-
-		calendar.style.transition = "none";
-		setTranslate(baseTranslate);
-	}
-
-
-
-
-	function movePrev() {
-		currentDate.setDate(currentDate.getDate() - 1);
-
-		calendar.insertBefore(nextPage, calendar.firstChild);// Đưa next lên đầu
-
-		const oldNext = nextPage;
-		nextPage = currentPage;
-		currentPage = prevPage;
-		prevPage = oldNext;
-
-		const newPrevDate = new Date(currentDate);
-		newPrevDate.setDate(newPrevDate.getDate() - 1);
-		viewPage(prevPage, newPrevDate);
-
-		calendar.style.transition = "none";
-		setTranslate(baseTranslate);
-	}
-
 
 
 
@@ -211,10 +229,9 @@ body {
 		baseTranslate = -width;
 		setTranslate(baseTranslate);
 	});
-</script>
-
-
-
-
+}
+	
+	
+	</script>
 </body>
 </html>
