@@ -1,63 +1,4 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lịch mượt Native</title>
-
-<style>
-	html, body {user-select: none;}
-	body {
-		margin: 0;
-		padding: 0;
-		overflow: hidden;
-		font-family: Times, Arial;
-		background: white;
-	}
-
-	.calendar {
-		display: flex;
-		width: 300vw;
-		height: 100vh;
-		touch-action: pan-x;
-		cursor: grab;
-		will-change: transform;
-	}
-
-	.calendar:active {
-		cursor: grabbing;
-	}
-
-	.page {
-		width: 100vw;
-		height: 100vh;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		background: white;
-	}
-
-	.date {
-		font-size: 28px;
-		font-weight: bold;
-	}
-
-	.weekday {
-		font-size: 20px;
-		margin-top: 10px;
-		color: gray;
-	}
-</style>
-</head>
-<body>
-	<div id="calendar" class="calendar">
-		<div class="page" id="prev"></div>
-		<div class="page" id="current"></div>
-		<div class="page" id="next"></div>
-	</div>
-	<script">
-	new function PageCalendar(){
+new function PageCalendar(){
 	const calendar	= document.getElementById("calendar");
 	let prevPage	= document.getElementById("prev");
 	let currentPage	= document.getElementById("current");
@@ -228,7 +169,3 @@
 		setTranslate(baseTranslate);
 	});
 }
-	
-	</script>
-</body>
-</html>
